@@ -67,11 +67,16 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu Drawer */}
-      <div className={`lg:hidden fixed inset-0 bg-surface z-[-1] transition-transform duration-700 pt-32 px-10 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="flex flex-col gap-8">
-          <div className="flex items-center gap-4 mb-8">
-            <Zap className="text-tertiary-fixed" />
-            <span className="font-headline font-black text-3xl tracking-tighter">APNA<span className="text-tertiary-fixed">SHASHANK</span></span>
+      <div className={`lg:hidden fixed inset-0 bg-surface z-[120] transition-transform duration-700 pt-32 px-10 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className="flex flex-col gap-8 relative z-10">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <Zap className="text-tertiary-fixed" />
+              <span className="font-headline font-black text-3xl tracking-tighter">APNA<span className="text-tertiary-fixed">SHASHANK</span></span>
+            </div>
+            <button onClick={() => setMobileMenuOpen(false)} className="text-on-surface p-2">
+              <X size={32} />
+            </button>
           </div>
           {navLinks.map((link) => (
             <a 
@@ -84,12 +89,14 @@ export default function Navbar() {
             </a>
           ))}
           <div className="mt-8 pt-8 border-t border-outline-variant/10">
-             <button className="w-full py-5 bg-tertiary-fixed text-primary rounded-xl font-headline font-black text-xl uppercase tracking-widest flex items-center justify-center gap-4">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+             <button className="w-full py-4 bg-tertiary-fixed text-primary rounded-xl font-headline font-black text-lg uppercase tracking-widest flex items-center justify-center gap-4">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               LET'S TALK
             </button>
           </div>
         </div>
+        {/* Background Accent */}
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-tertiary-fixed/10 blur-[100px] rounded-full -z-0"></div>
       </div>
     </nav>
   );

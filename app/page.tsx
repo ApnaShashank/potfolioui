@@ -453,11 +453,11 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
             </div>
 
-            {/* Floating Badges Layer */}
-            <FloatingBadge text="Vibe Coder" icon={<Zap size={14}/>} className="top-[10%] -left-10 bg-primary/10 text-primary border-primary/20" />
-            <FloatingBadge text="Creative Mind" icon={<Feather size={14}/>} className="top-[40%] -right-12 bg-secondary/10 text-secondary border-secondary/20" />
-            <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[15%] -left-16 bg-tertiary-fixed/10 text-primary border-tertiary-fixed/20" />
-            <FloatingBadge text="AI Learner" icon={<Activity size={14}/>} className="bottom-[5%] right-0 bg-surface-container-highest text-on-surface border-outline-variant/20" />
+            {/* Floating Badges Layer — Responsive Positioning */}
+            <FloatingBadge text="Vibe Coder" icon={<Zap size={14}/>} className="top-[5%] -left-4 lg:top-[10%] lg:-left-10 bg-primary/10 text-primary border-primary/20 scale-75 lg:scale-100" />
+            <FloatingBadge text="Creative Mind" icon={<Feather size={14}/>} className="top-[35%] -right-8 lg:top-[40%] lg:-right-12 bg-secondary/10 text-secondary border-secondary/20 scale-75 lg:scale-100" />
+            <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[20%] -left-10 lg:bottom-[15%] lg:-left-16 bg-tertiary-fixed/10 text-primary border-tertiary-fixed/20 scale-75 lg:scale-100" />
+            <FloatingBadge text="AI Learner" icon={<Activity size={14}/>} className="bottom-[5%] right-0 bg-surface-container-highest text-on-surface border-outline-variant/20 scale-75 lg:scale-100" />
             
             {/* Dynamic SVG Layer */}
             <svg className="hero-spin-svg absolute w-[120%] h-[120%] -z-10 opacity-20" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -868,9 +868,9 @@ export default function Home() {
             </a>
           </div>
 
-          {/* SHASHANK — Massive Interactive Text at Bottom */}
-          <div className="overflow-hidden px-4">
-            <div className="flex justify-center items-center whitespace-nowrap">
+          {/* SHASHANK — Massive Interactive Text at Bottom (Responsive Clamp) */}
+          <div className="overflow-hidden px-4 mb-10">
+            <div className="flex justify-center items-center flex-wrap lg:flex-nowrap whitespace-nowrap">
               {"SHASHANK".split("").map((char, i) => (
                 <FooterChar key={i} char={char} />
               ))}
@@ -938,7 +938,7 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
   return (
     <div
       ref={cardRef}
-      className={`skill-card relative ${span} bg-surface-container-low p-10 lg:p-12 rounded-[3.5rem] border border-outline-variant/10 hover:bg-surface-container-highest transition-colors duration-700 group overflow-hidden`}
+      className={`skill-card relative ${span} bg-surface-container-low p-8 lg:p-12 rounded-[2.5rem] lg:rounded-[3.5rem] border border-outline-variant/10 hover:bg-surface-container-highest transition-colors duration-700 group overflow-hidden`}
     >
       {/* Background Reactive Mesh */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-1000 pointer-events-none">
@@ -977,9 +977,9 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
 
 function ServiceCard({ icon, title, description, points }: { icon: React.ReactNode, title: string, description: string, points: string[] }) {
   return (
-    <div className="service-card bg-surface p-12 lg:p-16 rounded-[4rem] border border-outline-variant/10 hover:border-tertiary-fixed transition-all duration-700 h-full flex flex-col justify-between">
+    <div className="service-card bg-surface p-8 lg:p-16 rounded-[2.5rem] lg:rounded-[4rem] border border-outline-variant/10 hover:border-tertiary-fixed transition-all duration-700 h-full flex flex-col justify-between">
       <div>
-        <div className="mb-10 scale-125 origin-left">{icon}</div>
+        <div className="mb-8 lg:mb-10 scale-110 lg:scale-125 origin-left">{icon}</div>
         <h3 className="font-headline text-3xl lg:text-4xl font-bold mb-6">{title}</h3>
         <p className="font-body text-xl text-on-surface-variant leading-relaxed mb-10 opacity-70">{description}</p>
       </div>
@@ -1160,7 +1160,7 @@ function FooterChar({ char }: { char: string }) {
   return (
     <span
       onClick={() => setActive(!active)}
-      className={`font-headline text-[clamp(5rem,20vw,18rem)] font-black leading-[0.85] tracking-tighter select-none cursor-pointer transition-all duration-500 ease-out inline-block ${
+      className={`font-headline text-[clamp(2.5rem,11vw,18rem)] font-black leading-[0.85] tracking-tighter select-none cursor-pointer transition-all duration-500 ease-out inline-block px-0.5 lg:px-0 ${
         active
           ? "text-tertiary-fixed scale-105"
           : "text-white/[0.06] hover:text-tertiary-fixed/80 hover:scale-110"
