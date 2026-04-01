@@ -10,6 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        "brutal-bg": "#030303",
+        "brutal-fg": "#e0e0e0",
+        "accent": "#ccff00",
+        "neon-magenta": "#ff00ff",
+        "brutal-danger": "#ff3333",
         "on-primary": "#ffffff",
         "surface-container-low": "#f3f3f3",
         "outline-variant": "#c4c7c7",
@@ -61,7 +66,9 @@ const config: Config = {
       fontFamily: {
         "headline": ["var(--font-manrope)"],
         "body": ["var(--font-inter)"],
-        "label": ["var(--font-inter)"]
+        "label": ["var(--font-inter)"],
+        "space": ["var(--font-space)"],
+        "syncopate": ["var(--font-syncopate)"]
       },
       borderRadius: {
         "DEFAULT": "0.25rem",

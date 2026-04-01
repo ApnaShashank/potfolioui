@@ -54,10 +54,10 @@ export default function Home() {
   useGSAP(() => {
     // 1. Hero Reveal Animation
     const heroTl = gsap.timeline();
-    heroTl.from(".hero-title > span > span", {
+    heroTl.from(".hero-title .char", {
       y: 120,
       opacity: 0,
-      stagger: 0.15,
+      stagger: 0.05,
       duration: 1.2,
       ease: "power4.out",
     }).from(".hero-badge", {
@@ -66,11 +66,7 @@ export default function Home() {
       stagger: 0.1,
       duration: 0.6,
       ease: "back.out(1.7)",
-    }, "-=0.8").from(".hero-subtext", {
-      y: 20,
-      opacity: 0,
-      duration: 0.8,
-    }, "-=0.5").from(".hero-cta", {
+    }, "-=0.8").from(".hero-cta", {
       y: 20,
       opacity: 0,
       stagger: 0.2,
@@ -107,6 +103,32 @@ export default function Home() {
       repeat: -1,
       ease: "none",
     });
+
+    // Scroll Velocity Skew Effect
+    let lastScrollTop = 0;
+    let skew = 0;
+    const scrollContent = document.getElementById('scroll-content');
+    
+    const scrollLoop = () => {
+      if (scrollContent) {
+        const scrollTop = window.scrollY;
+        const velocity = scrollTop - lastScrollTop;
+        lastScrollTop = scrollTop;
+  
+        const maxSkew = 5.0;
+        const speed = Math.min(Math.max(velocity * 0.1, -maxSkew), maxSkew);
+  
+        skew += (speed - skew) * 0.1;
+  
+        if (Math.abs(skew) > 0.01) {
+          scrollContent.style.transform = `skewY(${skew}deg)`;
+        } else {
+          scrollContent.style.transform = `skewY(0deg)`;
+        }
+      }
+      requestAnimationFrame(scrollLoop);
+    };
+    const scrollRafId = requestAnimationFrame(scrollLoop);
 
     // 2. About Fluid Interaction
     if (aboutImageRef.current && aboutCursorRef.current && aboutBlobRef.current) {
@@ -410,6 +432,7 @@ export default function Home() {
 
     return () => {
       window.removeEventListener("mousemove", onBadgeMove);
+      cancelAnimationFrame(scrollRafId);
     };
 
   }, { scope: container });
@@ -417,67 +440,86 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main ref={container} className="bg-surface text-on-surface">
+      <main ref={container} className="bg-brutal-bg text-brutal-fg overflow-hidden">
+      <div id="scroll-content">
       {/* 1. Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 lg:px-20 overflow-hidden">
-        {/* Layered Background Blobs */}
-        <div className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] bg-tertiary-fixed/5 rounded-full blur-[140px] animate-float opacity-50"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[70vw] h-[70vw] bg-primary-container/5 rounded-full blur-[160px] animate-float" style={{ animationDelay: '-5s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] border border-outline-variant/5 rounded-full -z-0"></div>
+      <section className="relative min-h-screen flex items-center justify-center px-10 lg:px-24 mb-20">
+        {/* Layered Background Blobs - Toned Down for Brutal */}
+        <div className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] bg-accent/5 rounded-full blur-[140px] animate-float opacity-30 pointer-events-none"></div>
 
-        <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center relative z-10">
-          <div className="lg:col-span-8">
-            <h1 className="hero-title font-headline text-[clamp(4rem,11vw,9rem)] font-extrabold leading-[0.9] tracking-tight mb-10">
-              <span className="block overflow-hidden pb-4 -mb-4">
-                <span className="block">SHASHANK</span>
-              </span>
-              <span className="block overflow-hidden pb-4 -mb-4 text-secondary-fixed-dim">
-                <span className="block">GUPTA</span>
-              </span>
+        <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10 preserve-3d">
+          <div className="perspective-1000">
+            <h1 className="hero-title group flex flex-col items-start font-syncopate text-[clamp(2.5rem,7vw,6.5rem)] font-black leading-[1] tracking-tight uppercase text-white mb-8 transition-all">
+              <div className="relative">
+                {"SHASHANK"}
+              </div>
+              <div className="relative text-accent">
+                {"GUPTA"}
+              </div>
             </h1>
-            <p className="hero-subtext font-body text-xl lg:text-2xl text-on-surface-variant max-w-xl mb-12 leading-relaxed opacity-80 italic">
-              Merging aesthetic precision with high-energy frontend architectures. Building the future, one pixel at a time.
-            </p>
-            <div className="flex justify-start items-center">
-              <HeroActionSlider />
-            </div>
-          </div>
-          <div className="lg:col-span-4 relative flex justify-center items-center">
-            {/* Central Portrait Layer */}
-            <div className="relative w-full max-w-[450px] aspect-[4/5] bg-surface-container rounded-[4rem] overflow-hidden group shadow-3xl z-20">
-              <img 
-                src="/main-img.webp" 
-                className="w-full h-full object-cover object-top grayscale brightness-95 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
-                alt="Shashank Gupta Portrait"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
-            </div>
-
-            {/* Floating Badges Layer — Responsive Positioning */}
-            <FloatingBadge text="Vibe Coder" icon={<Zap size={14}/>} className="top-[5%] -left-4 lg:top-[10%] lg:-left-10 bg-primary/10 text-primary border-primary/20 scale-75 lg:scale-100" />
-            <FloatingBadge text="Creative Mind" icon={<Feather size={14}/>} className="top-[35%] -right-8 lg:top-[40%] lg:-right-12 bg-secondary/10 text-secondary border-secondary/20 scale-75 lg:scale-100" />
-            <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[20%] -left-10 lg:bottom-[15%] lg:-left-16 bg-tertiary-fixed/10 text-primary border-tertiary-fixed/20 scale-75 lg:scale-100" />
-            <FloatingBadge text="AI Learner" icon={<Activity size={14}/>} className="bottom-[5%] right-0 bg-surface-container-highest text-on-surface border-outline-variant/20 scale-75 lg:scale-100" />
             
-            {/* Dynamic SVG Layer */}
-            <svg className="hero-spin-svg absolute w-[120%] h-[120%] -z-10 opacity-20" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <path d="M45.7,-77.6C59.1,-71.3,70.2,-59.1,77.6,-45.1C85,-31.1,88.7,-15.5,87.6,-0.6C86.5,14.3,80.7,28.6,72,40.6C63.3,52.6,51.8,62.3,38.8,69.5C25.8,76.7,11.3,81.4,-3.1,86.7C-17.5,92,-31.7,98,-45.9,94.3C-60,90.6,-74.1,77.2,-82.4,61.7C-90.7,46.2,-93.2,28.6,-92,11.5C-90.8,-5.6,-86,-22.2,-77.7,-36.8C-69.4,-51.4,-57.6,-64,-43.8,-70.1C-30,-76.2,-14.2,-75.8,0.8,-77.2C15.8,-78.6,32.3,-83.9,45.7,-77.6Z" fill="#A3FF12" transform="translate(100 100) scale(0.8)"></path>
-            </svg>
+            <p className="font-space text-sm lg:text-base text-white/50 max-w-md mb-10 leading-relaxed uppercase tracking-widest">
+                Creative Developer & Interaction Designer <br/>
+                Crafting digital experiences that defy gravity.
+            </p>
+          </div>
+          <div className="relative flex justify-center items-center py-20 lg:py-0">
+            <div className="relative">
+                {/* Central Portrait Layer */}
+                <div className="relative w-[300px] lg:w-[420px] aspect-[4/5] bg-[#111] rounded-[3rem] overflow-hidden group shadow-[0_0_80px_rgba(0,0,0,1)] z-20 border border-white/10">
+                  <img 
+                    src="/main-img.webp" 
+                    className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 mix-blend-luminosity group-hover:mix-blend-normal"
+                    alt="Shashank Gupta Portrait"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                </div>
 
-            {/* Additional Layered Decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 border border-primary/5 rounded-full z-10 translate-x-1/2 -translate-y-1/2"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 border border-tertiary-fixed/10 rounded-full z-10 -translate-x-1/2 translate-y-1/2"></div>
+                {/* Floating Badges Layer - Dark Glass Style for High Visibility */}
+                <FloatingBadge text="Vibe Coder" icon={<Zap size={14}/>} className="top-[5%] -left-[15%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50 transition-transform" />
+                <FloatingBadge text="Creative Mind" icon={<Feather size={14}/>} className="top-[35%] -right-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50 transition-transform" />
+                <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[25%] -left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50 transition-transform" />
+                <FloatingBadge text="AI Learner" icon={<Cpu size={14}/>} className="bottom-[5%] -right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50 transition-transform" />
+                
+                {/* Dynamic SVG Layer */}
+                <svg className="hero-spin-svg absolute -top-20 -right-20 w-[140%] h-[140%] -z-10 opacity-30 pointer-events-none blur-2xl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M45.7,-77.6C59.1,-71.3,70.2,-59.1,77.6,-45.1C85,-31.1,88.7,-15.5,87.6,-0.6C86.5,14.3,80.7,28.6,72,40.6C63.3,52.6,51.8,62.3,38.8,69.5C25.8,76.7,11.3,81.4,-3.1,86.7C-17.5,92,-31.7,98,-45.9,94.3C-60,90.6,-74.1,77.2,-82.4,61.7C-90.7,46.2,-93.2,28.6,-92,11.5C-90.8,-5.6,-86,-22.2,-77.7,-36.8C-69.4,-51.4,-57.6,-64,-43.8,-70.1C-30,-76.2,-14.2,-75.8,0.8,-77.2C15.8,-78.6,32.3,-83.9,45.7,-77.6Z" fill="#ccff00" transform="translate(100 100)"></path>
+                </svg>
+            </div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
-          <span className="font-label text-[10px] uppercase tracking-[6px] text-secondary opacity-60">Scroll</span>
-          <div className="w-[1px] h-24 relative overflow-hidden bg-outline-variant/20 rounded-full">
-            <div className="absolute top-0 left-0 w-full h-full bg-primary origin-top animate-scroll-line"></div>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-10 mix-blend-difference">
+          <span className="font-space text-[10px] uppercase tracking-[6px] text-white opacity-60">Scroll</span>
+          <div className="w-[1px] h-24 relative overflow-hidden bg-white/20 rounded-full">
+            <div className="absolute top-0 left-0 w-full h-full bg-accent origin-top animate-scroll-line"></div>
           </div>
         </div>
+        
+        {/* Brutalist Tape Wrapper */}
+        <div className="absolute bottom-12 left-[-10%] w-[120%] bg-accent text-black -rotate-[3deg] py-4 border-y-4 border-black shadow-2xl z-30 pointer-events-none">
+            <div className="font-syncopate text-2xl lg:text-3xl font-black whitespace-nowrap animate-tape-scroll tracking-widest">
+                APNASHASHANK DIGITAL ✦ SCROLL VELOCITY ✦ INTERACTIVE SYSTEMS ✦ APNASHASHANK DIGITAL ✦ SCROLL VELOCITY ✦ INTERACTIVE SYSTEMS ✦ APNASHASHANK DIGITAL ✦ SCROLL VELOCITY ✦ INTERACTIVE SYSTEMS ✦
+            </div>
+        </div>
       </section>
+
+      {/* 2. Brutalist Text Section 1 */}
+      <section className="min-h-[70vh] bg-[#080808] flex items-center px-6 py-20 lg:p-[10vw] border-t border-[#222]">
+          <p className="font-space font-light text-[clamp(2rem,5vw,4rem)] leading-[1.1] text-[#444] max-w-6xl">
+              WE BUILD <span className="text-white font-bold">DIGITAL EXPERIENCES</span> THAT DEFY GRAVITY. NO TEMPLATES. NO LIMITS. JUST <span className="text-white font-bold">PURE CODE</span> AND <span className="text-white font-bold">RAW AESTHETICS</span>.
+          </p>
+      </section>
+
+      {/* 3. Brutalist Text Section 2 */}
+      <section className="min-h-[50vh] bg-[#080808] flex items-center justify-end px-6 py-20 lg:p-[10vw] border-t border-[#222] text-right">
+          <p className="font-space font-light text-[clamp(3rem,6vw,5rem)] leading-[1] text-[#444] tracking-tight">
+              INTERACTION<br/>
+              <span className="text-accent font-bold">REDEFINED</span>
+          </p>
+      </section>
+      </div>
 
       {/* 2. Marquee Section */}
       <div className="py-16 bg-surface-container-low border-y border-outline-variant/10 overflow-hidden relative">
@@ -868,9 +910,9 @@ export default function Home() {
             </a>
           </div>
 
-          {/* SHASHANK — Massive Interactive Text at Bottom (Responsive Clamp) */}
-          <div className="overflow-hidden px-4 mb-10">
-            <div className="flex justify-center items-center flex-wrap lg:flex-nowrap whitespace-nowrap">
+          {/* SHASHANK — Massive Interactive Text at Bottom */}
+          <div className="overflow-hidden px-4">
+            <div className="flex justify-center items-center whitespace-nowrap">
               {"SHASHANK".split("").map((char, i) => (
                 <FooterChar key={i} char={char} />
               ))}
@@ -938,7 +980,7 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
   return (
     <div
       ref={cardRef}
-      className={`skill-card relative ${span} bg-surface-container-low p-8 lg:p-12 rounded-[2.5rem] lg:rounded-[3.5rem] border border-outline-variant/10 hover:bg-surface-container-highest transition-colors duration-700 group overflow-hidden`}
+      className={`skill-card relative ${span} bg-surface-container-low p-10 lg:p-12 rounded-[3.5rem] border border-outline-variant/10 hover:bg-surface-container-highest transition-colors duration-700 group overflow-hidden`}
     >
       {/* Background Reactive Mesh */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-1000 pointer-events-none">
@@ -977,9 +1019,9 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
 
 function ServiceCard({ icon, title, description, points }: { icon: React.ReactNode, title: string, description: string, points: string[] }) {
   return (
-    <div className="service-card bg-surface p-8 lg:p-16 rounded-[2.5rem] lg:rounded-[4rem] border border-outline-variant/10 hover:border-tertiary-fixed transition-all duration-700 h-full flex flex-col justify-between">
+    <div className="service-card bg-surface p-12 lg:p-16 rounded-[4rem] border border-outline-variant/10 hover:border-tertiary-fixed transition-all duration-700 h-full flex flex-col justify-between">
       <div>
-        <div className="mb-8 lg:mb-10 scale-110 lg:scale-125 origin-left">{icon}</div>
+        <div className="mb-10 scale-125 origin-left">{icon}</div>
         <h3 className="font-headline text-3xl lg:text-4xl font-bold mb-6">{title}</h3>
         <p className="font-body text-xl text-on-surface-variant leading-relaxed mb-10 opacity-70">{description}</p>
       </div>
@@ -1096,60 +1138,11 @@ function FooterGroup({ title, links }: { title: string, links: string[] }) {
   );
 }
 
-function HeroActionSlider() {
-  const [activeSide, setActiveSide] = React.useState<'vibe' | 'works'>('vibe');
-  const handleRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  const toggle = (side: 'vibe' | 'works') => {
-    setActiveSide(side);
-    if (handleRef.current && trackRef.current) {
-      const trackWidth = trackRef.current.offsetWidth;
-      const handleWidth = handleRef.current.offsetWidth;
-      const xPos = side === 'vibe' ? 8 : trackWidth - handleWidth - 8;
-      
-      gsap.to(handleRef.current, {
-        x: xPos,
-        duration: 0.6,
-        ease: "elastic.out(1, 0.8)"
-      });
-    }
-    
-    // Action logic
-    if (side === 'works') {
-      const archive = document.getElementById('archive');
-      if (archive) archive.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  return (
-    <div 
-      ref={trackRef}
-      className="hero-cta relative w-[320px] lg:w-[400px] h-24 bg-surface-container-low rounded-full border border-outline-variant/10 p-2 flex items-center cursor-pointer group shadow-2xl shadow-primary/5"
-      onClick={() => toggle(activeSide === 'vibe' ? 'works' : 'vibe')}
-    >
-      {/* Track Labels */}
-      <div className="flex w-full justify-between items-center px-10 relative z-10 pointer-events-none">
-        <span className={`font-headline font-black text-sm tracking-widest transition-opacity duration-300 ${activeSide === 'vibe' ? 'opacity-100 text-on-primary' : 'opacity-40'}`}>LET'S VIBE</span>
-        <span className={`font-headline font-black text-sm tracking-widest transition-opacity duration-300 ${activeSide === 'works' ? 'opacity-100 text-on-primary' : 'opacity-40'}`}>THE WORKS</span>
-      </div>
-
-      {/* Sliding Handle */}
-      <div 
-        ref={handleRef}
-        className="absolute left-2 w-[140px] lg:w-[180px] h-[calc(100%-16px)] bg-primary rounded-full z-0 flex items-center justify-center"
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-tertiary-fixed animate-pulse"></div>
-      </div>
-    </div>
-  );
-}
-
 function FloatingBadge({ text, icon, className }: { text: string, icon: React.ReactNode, className: string }) {
   return (
-    <div className={`hero-badge absolute px-6 py-3 rounded-full border backdrop-blur-md flex items-center gap-3 font-headline font-bold text-sm z-30 transition-shadow hover:shadow-xl ${className}`}>
+    <div className={`hero-badge absolute px-8 py-4 rounded-full border flex items-center gap-4 font-space font-black text-[10px] uppercase tracking-[0.2em] z-30 transition-all shadow-2xl ${className}`}>
       {icon}
-      {text}
+      <span>{text}</span>
     </div>
   );
 }
@@ -1160,7 +1153,7 @@ function FooterChar({ char }: { char: string }) {
   return (
     <span
       onClick={() => setActive(!active)}
-      className={`font-headline text-[clamp(2.5rem,11vw,18rem)] font-black leading-[0.85] tracking-tighter select-none cursor-pointer transition-all duration-500 ease-out inline-block px-0.5 lg:px-0 ${
+      className={`font-headline text-[clamp(5rem,20vw,18rem)] font-black leading-[0.85] tracking-tighter select-none cursor-pointer transition-all duration-500 ease-out inline-block ${
         active
           ? "text-tertiary-fixed scale-105"
           : "text-white/[0.06] hover:text-tertiary-fixed/80 hover:scale-110"

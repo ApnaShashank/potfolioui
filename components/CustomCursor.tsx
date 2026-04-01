@@ -5,81 +5,124 @@ import { gsap } from 'gsap';
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const followerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const cursor = cursorRef.current;
-    const follower = followerRef.current;
+    if (!cursor) return;
 
-    if (!cursor || !follower) return;
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    // Initial hide to avoid stuck dot at 0,0
+    gsap.set(cursor, { opacity: 0 });
 
     const onMouseMove = (e: MouseEvent) => {
-      const { clientX: x, clientY: y } = e;
-
-      gsap.to(cursor, {
-        x: x,
-        y: y,
-        duration: 0.1,
-        ease: 'power2.out',
-      });
-
-      gsap.to(follower, {
-        x: x,
-        y: y,
-        duration: 0.4,
-        ease: 'power2.out',
-      });
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      // Reveal on first move
+      if (cursor.style.opacity === '0') {
+        gsap.to(cursor, { opacity: 1, duration: 0.3 });
+      }
     };
 
-    const onMouseDown = () => {
-      gsap.to([cursor, follower], { scale: 0.8, duration: 0.2 });
+    const animateCursor = () => {
+      cursorX += (mouseX - cursorX) * 0.15;
+      cursorY += (mouseY - cursorY) * 0.15;
+      
+      if (cursor) {
+        cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+      }
+      requestAnimationFrame(animateCursor);
     };
 
-    const onMouseUp = () => {
-      gsap.to([cursor, follower], { scale: 1, duration: 0.2 });
-    };
-
+    const animationId = requestAnimationFrame(animateCursor);
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mouseup', onMouseUp);
+    document.body.classList.add('custom-cursor-active');
 
-    // Hover effects for interactive elements
-    const interactiveElements = document.querySelectorAll('button, a, .interactive');
-    
-    interactiveElements.forEach((el) => {
-      el.addEventListener('mouseenter', () => {
-        gsap.to(follower, {
-          scale: 3,
-          backgroundColor: 'rgba(163, 255, 18, 0.3)',
-          duration: 0.3,
+    // Provide magnetic behavior
+    const updateMagneticElements = () => {
+        const magneticElements = document.querySelectorAll('.magnetic');
+        
+        magneticElements.forEach(el => {
+            const htmlEl = el as HTMLElement;
+            if (htmlEl.dataset.magneticInit) return;
+            htmlEl.dataset.magneticInit = 'true';
+
+            htmlEl.addEventListener('mousemove', (e: MouseEvent) => {
+                const rect = htmlEl.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const dist = 0.5;
+
+                const moveX = (e.clientX - centerX) * dist;
+                const moveY = (e.clientY - centerY) * dist;
+
+                gsap.to(htmlEl, {
+                    x: moveX,
+                    y: moveY,
+                    duration: 0.2,
+                    ease: "power2.out"
+                });
+                
+                if (cursor) {
+                   cursor.classList.add('magnet-active');
+                   gsap.to(cursor, {
+                       width: 90,
+                       height: 90,
+                       backgroundColor: 'transparent',
+                       border: '1px solid #ccff00',
+                       duration: 0.3,
+                       ease: "power2.out"
+                   });
+                   const inner = cursor.querySelector('.cursor-dot');
+                   if (inner) {
+                       gsap.to(inner, { scale: 1, autoAlpha: 1, duration: 0.3 });
+                   }
+                }
+            });
+
+            htmlEl.addEventListener('mouseleave', () => {
+                gsap.to(htmlEl, { x: 0, y: 0, duration: 0.4, ease: "elastic.out(1, 0.4)" });
+                
+                if (cursor) {
+                   cursor.classList.remove('magnet-active');
+                   gsap.to(cursor, {
+                       width: 20,
+                       height: 20,
+                       backgroundColor: '#ccff00',
+                       border: '0px solid transparent',
+                       duration: 0.3,
+                       ease: "power2.out"
+                   });
+                   const inner = cursor.querySelector('.cursor-dot');
+                   if (inner) {
+                       gsap.to(inner, { scale: 0, autoAlpha: 0, duration: 0.3 });
+                   }
+                }
+            });
         });
-      });
-      el.addEventListener('mouseleave', () => {
-        gsap.to(follower, {
-          scale: 1,
-          backgroundColor: 'transparent',
-          duration: 0.3,
-        });
-      });
-    });
+    };
+
+    updateMagneticElements();
+    const observer = new MutationObserver(updateMagneticElements);
+    observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mousedown', onMouseDown);
-      window.removeEventListener('mouseup', onMouseUp);
+      cancelAnimationFrame(animationId);
+      observer.disconnect();
+      document.body.classList.remove('custom-cursor-active');
     };
   }, []);
 
   return (
-    <>
-      <div
-        ref={cursorRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-primary rounded-full pointer-events-none z-[9999] mix-blend-difference"
-      />
-      <div
-        ref={followerRef}
-        className="fixed top-0 left-0 w-8 h-8 border border-primary rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-transform duration-100 ease-out"
-      />
-    </>
+    <div
+      ref={cursorRef}
+      className="fixed top-0 left-0 w-5 h-5 bg-accent rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center"
+      style={{ willChange: "transform, width, height" }}
+    >
+        <div className="cursor-dot w-2 h-2 bg-accent rounded-full opacity-0 scale-0"></div>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Inter, Manrope, Space_Grotesk, Syncopate } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
@@ -13,6 +13,19 @@ const inter = Inter({
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+  display: "swap",
+});
+
+const syncopate = Syncopate({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-syncopate",
   display: "swap",
 });
 
@@ -34,7 +47,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} antialiased selection:bg-tertiary-fixed selection:text-primary`}>
+      <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} ${spaceGrotesk.variable} ${syncopate.variable} antialiased selection:bg-accent selection:text-primary`}>
         <LenisProvider>
           <CustomCursor />
           {children}
