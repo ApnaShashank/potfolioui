@@ -73,35 +73,41 @@ export default function Home() {
       duration: 0.8,
     }, "-=0.5");
 
-    // Magnetic Badges
+    // Magnetic Badges Optimization (using quickTo for high performance)
     const badges = document.querySelectorAll(".hero-badge");
+    
+    // Setup quickTo for each badge to prevent tween buildup
+    const badgeAnimations = Array.from(badges).map(badge => ({
+      element: badge,
+      xTo: gsap.quickTo(badge, "x", { duration: 0.4, ease: "power2.out" }),
+      yTo: gsap.quickTo(badge, "y", { duration: 0.4, ease: "power2.out" })
+    }));
+
     const onBadgeMove = (e: MouseEvent) => {
-      badges.forEach((badge) => {
-        const rect = badge.getBoundingClientRect();
+      badgeAnimations.forEach(({ element, xTo, yTo }) => {
+        const rect = element.getBoundingClientRect();
         const bx = rect.left + rect.width / 2;
         const by = rect.top + rect.height / 2;
         const dist = Math.hypot(e.clientX - bx, e.clientY - by);
         
         if (dist < 200) {
-          gsap.to(badge, {
-            x: (e.clientX - bx) * 0.2,
-            y: (e.clientY - by) * 0.2,
-            duration: 0.4,
-            ease: "power2.out",
-          });
+          xTo((e.clientX - bx) * 0.2);
+          yTo((e.clientY - by) * 0.2);
         } else {
-          gsap.to(badge, { x: 0, y: 0, duration: 0.6 });
+          xTo(0);
+          yTo(0);
         }
       });
     };
     window.addEventListener("mousemove", onBadgeMove);
 
-    // Hero SVG Spin
+    // Hero SVG Spin Optimization
     gsap.to(".hero-spin-svg", {
-      rotate: 360,
+      rotation: 360,
       duration: 30,
       repeat: -1,
       ease: "none",
+      force3D: true,
     });
 
     // Scroll Velocity Skew Effect
@@ -121,9 +127,9 @@ export default function Home() {
         skew += (speed - skew) * 0.1;
   
         if (Math.abs(skew) > 0.01) {
-          scrollContent.style.transform = `skewY(${skew}deg)`;
+          scrollContent.style.transform = `skewY(${skew}deg) translateZ(0)`;
         } else {
-          scrollContent.style.transform = `skewY(0deg)`;
+          scrollContent.style.transform = `translateZ(0)`;
         }
       }
       requestAnimationFrame(scrollLoop);
@@ -444,8 +450,8 @@ export default function Home() {
       <div id="scroll-content">
       {/* 1. Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-10 lg:px-24 mb-20">
-        {/* Layered Background Blobs - Toned Down for Brutal */}
-        <div className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] bg-accent/5 rounded-full blur-[140px] animate-float opacity-30 pointer-events-none"></div>
+        {/* Layered Background Blobs - Optimized (Removed expensive blur, used radial gradient) */}
+        <div className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(204,255,0,0.06)_0%,transparent_60%)] rounded-full animate-float opacity-80 pointer-events-none" style={{ willChange: 'transform' }}></div>
 
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10 preserve-3d">
           <div className="perspective-1000">
@@ -481,8 +487,9 @@ export default function Home() {
                 <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[25%] -left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50 transition-transform" />
                 <FloatingBadge text="AI Learner" icon={<Cpu size={14}/>} className="bottom-[5%] -right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50 transition-transform" />
                 
-                {/* Dynamic SVG Layer */}
-                <svg className="hero-spin-svg absolute -top-20 -right-20 w-[140%] h-[140%] -z-10 opacity-30 pointer-events-none blur-2xl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                {/* Dynamic SVG Layer - Optimized (Removed blur, added will-change) */}
+                <div className="absolute w-[180%] h-[180%] -top-[40%] -left-[40%] -z-10 opacity-60 pointer-events-none bg-[radial-gradient(circle,rgba(204,255,0,0.08)_0%,transparent_60%)] rounded-full"></div>
+                <svg className="hero-spin-svg absolute -top-20 -right-20 w-[140%] h-[140%] -z-10 opacity-30 pointer-events-none" style={{ willChange: 'transform' }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                   <path d="M45.7,-77.6C59.1,-71.3,70.2,-59.1,77.6,-45.1C85,-31.1,88.7,-15.5,87.6,-0.6C86.5,14.3,80.7,28.6,72,40.6C63.3,52.6,51.8,62.3,38.8,69.5C25.8,76.7,11.3,81.4,-3.1,86.7C-17.5,92,-31.7,98,-45.9,94.3C-60,90.6,-74.1,77.2,-82.4,61.7C-90.7,46.2,-93.2,28.6,-92,11.5C-90.8,-5.6,-86,-22.2,-77.7,-36.8C-69.4,-51.4,-57.6,-64,-43.8,-70.1C-30,-76.2,-14.2,-75.8,0.8,-77.2C15.8,-78.6,32.3,-83.9,45.7,-77.6Z" fill="#ccff00" transform="translate(100 100)"></path>
                 </svg>
             </div>
