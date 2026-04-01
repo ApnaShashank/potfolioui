@@ -599,7 +599,7 @@ export default function Home() {
       </section>
 
       {/* 4. Stats Section */}
-      <section className="py-24 bg-surface-container-lowest border-y border-outline-variant/10">
+      <section className="py-24 bg-[#080808] border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-20 grid grid-cols-2 lg:grid-cols-4 gap-12">
           <StatBox number="98" suffix="%" label="User Satisfaction" />
           <StatBox number="35" suffix="+" label="Industry Awards" />
@@ -609,12 +609,12 @@ export default function Home() {
       </section>
 
       {/* 5. Skills Section */}
-      <section className="py-32 px-6 lg:px-20 bg-surface">
+      <section id="about" className="py-32 px-6 lg:px-20 bg-brutal-bg">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-20">
             <div className="max-w-2xl">
-              <h2 className="font-headline text-4xl lg:text-6xl font-bold mb-6">Mastering the Craft</h2>
-              <p className="font-body text-lg text-on-surface-variant opacity-80">Blending technical mastery with creative intuition to build high-performance products.</p>
+              <h2 className="font-headline text-4xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tighter">Mastering the Craft</h2>
+              <p className="font-space text-lg text-white/50 uppercase tracking-widest leading-relaxed">Blending technical mastery with creative intuition to build high-performance digital products.</p>
             </div>
           </div>
           
@@ -659,14 +659,14 @@ export default function Home() {
       </section>
 
       {/* 6. Services Section */}
-      <section className="services-section py-32 px-6 lg:px-20 bg-surface-container-low">
+      <section id="services" className="services-section py-32 px-6 lg:px-20 bg-[#080808] border-y border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-24 text-center md:text-left gap-8">
-            <h2 className="font-headline text-4xl lg:text-6xl font-bold">Solutions Provided</h2>
-            <button className="interactive group flex items-center gap-4 font-headline font-bold text-xl hover:text-tertiary-fixed transition-colors">
+            <h2 className="font-headline text-4xl lg:text-7xl font-bold text-white uppercase tracking-tighter">Solutions Provided</h2>
+            <a href="mailto:shashank8808108802@gmail.com" className="interactive group flex items-center gap-4 font-syncopate font-bold text-xl text-accent hover:text-white transition-colors">
               Request a Custom Solution
               <ChevronRight className="group-hover:translate-x-2 transition-transform" />
-            </button>
+            </a>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -721,16 +721,16 @@ export default function Home() {
       </section>
 
       {/* 9. Case Study Highlight */}
-      <section className="case-study-section py-20 px-6 lg:px-20 bg-primary-container text-white overflow-hidden relative">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-tertiary-fixed to-transparent"></div>
+      <section className="case-study-section py-20 px-6 lg:px-20 bg-[#0a0a0a] text-white overflow-hidden relative border-y border-white/5">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_rgba(204,255,0,0.15)_0%,transparent_70%)]"></div>
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20 relative z-10">
           <div className="w-full lg:w-1/2">
-            <p className="font-label tracking-[4px] uppercase text-tertiary-fixed mb-8">Selected Project 2024</p>
-            <h2 className="font-headline text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10">NEOBANK <br /><span className="text-secondary-fixed">PLATFORM</span></h2>
-            <p className="font-body text-xl opacity-70 mb-12 max-w-xl">A complete overhaul of the digital banking experience for creative entrepreneurs, resulting in 40% increased retention.</p>
-            <button className="interactive bg-tertiary-fixed text-primary px-10 py-6 rounded-2xl font-headline font-black text-xl hover:scale-105 transition-transform flex items-center gap-4">
-              Explore Study <ArrowRight />
-            </button>
+            <p className="font-space tracking-[4px] uppercase text-accent mb-8">Selected Project 2024</p>
+            <h2 className="font-headline text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10">NEOBANK <br /><span className="text-white/20">PLATFORM</span></h2>
+            <p className="font-space text-xl opacity-50 mb-12 max-w-xl uppercase tracking-widest">A complete overhaul of the digital banking experience for creative entrepreneurs, resulting in 40% increased retention.</p>
+            <a href="mailto:shashank8808108802@gmail.com" className="interactive bg-accent text-black px-10 py-6 rounded-2xl font-syncopate font-black text-xl hover:scale-105 transition-transform flex items-center justify-center gap-4">
+              Explore Study <ArrowRight size={20} />
+            </a>
           </div>
           <div className="w-full lg:w-1/2 relative">
             <div className="case-study-img rounded-[4rem] overflow-hidden shadow-2xl relative z-10 rotate-3 group hover:rotate-0 transition-transform duration-700">
@@ -846,13 +846,13 @@ export default function Home() {
       </section>
 
       {/* 13. Experience Section */}
-      <section className="experience-section py-32 px-6 lg:px-20 bg-surface">
+      <section className="experience-section py-32 px-6 lg:px-20 bg-brutal-bg">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-headline text-4xl lg:text-5xl font-bold mb-20">The Journey</h2>
+          <h2 className="font-headline text-4xl lg:text-7xl font-bold mb-20 text-white uppercase tracking-tighter">The Journey</h2>
           <div className="space-y-4">
-            <ExperienceItem date="2021 — PRESENT" role="Lead Product Designer" co="TechnoCore Ltd." loc="London, UK (Remote)" />
-            <ExperienceItem date="2018 — 2021" role="Senior UI/UX Designer" co="Visual Flows Studio" loc="Berlin, DE" />
-            <ExperienceItem date="2016 — 2018" role="Digital Designer" co="Brand Makers" loc="Paris, FR" />
+            <ExperienceItem date="2021 — PRESENT" role="Vibe Coder / Freelancer" co="Independent Studio" loc="Delhi, India" />
+            <ExperienceItem date="2018 — 2021" role="Senior UI Developer" co="Digital Alchemy" loc="New Delhi, India" />
+            <ExperienceItem date="2016 — 2018" role="Interaction Designer" co="Creative Pulsar" loc="NCR, India" />
           </div>
         </div>
       </section>
@@ -876,11 +876,11 @@ export default function Home() {
             ref={footerTextRef}
             className="cta-reveal-text font-headline text-[clamp(4rem,15vw,10rem)] font-black text-white leading-[0.8] tracking-tighter mb-16 cursor-none"
           >
-            LET'S <br /> CREATE <br /> <span className="text-tertiary-fixed">ICONIC</span>
+            LET'S <br /> CREATE <br /> <span className="text-accent">ICONIC</span>
           </h2>
-          <button className="interactive bg-tertiary-fixed text-primary px-12 py-8 rounded-full font-headline font-black text-2xl hover:scale-110 transition-transform shadow-3xl shadow-tertiary-fixed/20">
+          <a href="mailto:shashank8808108802@gmail.com" className="interactive inline-block bg-accent text-black px-12 py-8 rounded-full font-syncopate font-black text-2xl hover:scale-110 transition-transform shadow-[0_0_50px_rgba(204,255,0,0.3)]">
             START A PROJECT
-          </button>
+          </a>
         </div>
 
         {/* Mega Name + Footer Bar */}
@@ -908,12 +908,12 @@ export default function Home() {
 
           {/* Social Icons — Right Side */}
           <div className="hidden lg:flex absolute right-8 bottom-32 flex-col gap-8 z-20 items-end">
-            <a href="mailto:hello@shashank.design" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Email">
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Email</span>
+            <a href="mailto:shashank8808108802@gmail.com" className="group flex items-center gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Email">
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Email</span>
               <Mail size={28} />
             </a>
-            <a href="#" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Instagram">
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Instagram</span>
+            <a href="#" className="group flex items-center gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Instagram">
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Instagram</span>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
             </a>
           </div>
@@ -928,11 +928,11 @@ export default function Home() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-white/10 py-6 px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[10px] uppercase tracking-[4px] text-white/25 font-medium">© 2024 SHASHANK GUPTA — BORN IN DELHI, SCALING GLOBALLY</p>
+          <div className="border-t border-white/5 py-6 px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-[10px] uppercase tracking-[4px] text-white/20 font-medium">© 2024 SHASHANK GUPTA — BORN IN DELHI, SCALING GLOBALLY</p>
             <div className="flex gap-4 items-center">
-              <span className="w-2 h-2 rounded-full bg-tertiary-fixed animate-pulse"></span>
-              <span className="text-[10px] uppercase tracking-[4px] text-white/25 font-medium">AVAILABLE FOR NEW VENTURES</span>
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+              <span className="text-[10px] uppercase tracking-[4px] text-white/20 font-medium">AVAILABLE FOR NEW VENTURES</span>
             </div>
           </div>
         </div>

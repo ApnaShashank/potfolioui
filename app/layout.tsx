@@ -30,8 +30,33 @@ const syncopate = Syncopate({
 });
 
 export const metadata: Metadata = {
-  title: "DESIGNER.P — Digital Curator & UI/UX Specialist",
-  description: "A multi-disciplinary designer specializing in crafting digital interfaces that merge aesthetic precision with psychological triggers.",
+  title: "Shashank Gupta — Vibe Coder & Creative Developer",
+  description: "Vibe Coder specialized in building the best websites with interaction design and raw aesthetics. Currently open for freelancing and global job opportunities.",
+  keywords: ["Shashank Gupta", "Vibe Coder", "Creative Developer", "Next.JS Portfolio", "Web Design", "Freelancer"],
+  icons: {
+    icon: "https://ik.imagekit.io/DEMOPROJECT/0e7bfec2-c25d-4cef-a895-df18857a856c.png",
+    apple: "https://ik.imagekit.io/DEMOPROJECT/0e7bfec2-c25d-4cef-a895-df18857a856c.png",
+  },
+  openGraph: {
+    title: "Shashank Gupta — Vibe Coder",
+    description: "Building the best websites that defy gravity. Currently open for freelancing and jobs.",
+    type: "website",
+    locale: "en_IN",
+    images: [
+      {
+        url: "https://ik.imagekit.io/DEMOPROJECT/0e7bfec2-c25d-4cef-a895-df18857a856c.png",
+        width: 1200,
+        height: 630,
+        alt: "Shashank Gupta Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shashank Gupta — Vibe Coder",
+    description: "Building the best websites that defy gravity.",
+    images: ["https://ik.imagekit.io/DEMOPROJECT/0e7bfec2-c25d-4cef-a895-df18857a856c.png"],
+  },
 };
 
 export default function RootLayout({
