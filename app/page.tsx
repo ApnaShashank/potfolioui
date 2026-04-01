@@ -470,10 +470,10 @@ export default function Home() {
                 Crafting digital experiences that defy gravity.
             </p>
           </div>
-          <div className="relative flex justify-center items-center py-20 lg:py-0">
+          <div className="relative flex justify-center items-center py-12 lg:py-0">
             <div className="relative">
                 {/* Central Portrait Layer */}
-                <div className="relative w-[300px] lg:w-[420px] aspect-[4/5] bg-[#111] rounded-[3rem] overflow-hidden group shadow-[0_0_80px_rgba(0,0,0,1)] z-20 border border-white/10">
+                <div className="relative w-[85vw] max-w-[340px] lg:w-[420px] aspect-[4/5] bg-[#111] rounded-[3rem] overflow-hidden group shadow-[0_0_80px_rgba(0,0,0,1)] z-20 border border-white/10">
                   <img 
                     src="/main-img.webp" 
                     className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 mix-blend-luminosity group-hover:mix-blend-normal"
@@ -483,10 +483,10 @@ export default function Home() {
                 </div>
 
                 {/* Floating Badges Layer - Responsive Scaling and Position */}
-                <FloatingBadge text="Vibe Coder" icon={<Zap size={14}/>} className="top-[5%] -left-[5%] lg:-left-[15%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="Creative Mind" icon={<Feather size={14}/>} className="top-[35%] -right-[10%] lg:-right-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[25%] -left-[10%] lg:-left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="AI Learner" icon={<Cpu size={14}/>} className="bottom-[12%] -right-[5%] lg:-right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="Vibe Coder" icon={<Zap size={14}/>} className="top-[5%] -left-[2%] lg:-left-[15%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="Creative Mind" icon={<Feather size={14}/>} className="top-[35%] -right-[5%] lg:-right-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[25%] -left-[5%] lg:-left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="AI Learner" icon={<Cpu size={14}/>} className="bottom-[12%] -right-[2%] lg:-right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50" />
                 
                 {/* Dynamic SVG Layer - Optimized (Removed blur, added will-change) */}
                 <div className="absolute w-[180%] h-[180%] -top-[40%] -left-[40%] -z-10 opacity-60 pointer-events-none bg-[radial-gradient(circle,rgba(204,255,0,0.08)_0%,transparent_60%)] rounded-full"></div>
@@ -1148,7 +1148,7 @@ function FooterGroup({ title, links }: { title: string, links: string[] }) {
 
 function FloatingBadge({ text, icon, className }: { text: string, icon: React.ReactNode, className: string }) {
   return (
-    <div className={`hero-badge absolute px-4 lg:px-8 py-2 lg:py-4 rounded-full border flex items-center gap-2 lg:gap-4 font-space font-black text-[8px] lg:text-[10px] uppercase tracking-[0.2em] z-30 shadow-2xl will-change-transform opacity-100 ${className}`}>
+    <div className={`hero-badge absolute px-4 lg:px-8 py-2 lg:py-4 rounded-full border flex items-center gap-2 lg:gap-4 font-space font-black text-[8px] lg:text-[10px] uppercase tracking-[0.2em] z-30 shadow-2xl will-change-transform opacity-100 whitespace-nowrap ${className}`}>
       {icon}
       <span>{text}</span>
     </div>
