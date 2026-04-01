@@ -119,10 +119,10 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 w-5 h-5 bg-accent rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center"
+      className="fixed top-0 left-0 w-5 h-5 bg-accent rounded-full pointer-events-none z-[9999] flex items-center justify-center border border-black/20"
       style={{ willChange: "transform, width, height" }}
     >
-        <div className="cursor-dot w-2 h-2 bg-accent rounded-full opacity-0 scale-0"></div>
+        <div className="cursor-dot w-2 h-2 bg-black rounded-full opacity-0 scale-0"></div>
     </div>
   );
 }

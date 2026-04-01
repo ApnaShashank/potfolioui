@@ -126,9 +126,6 @@ export default function Navbar() {
       {/* Mobile Menu Drawer */}
       <div className={`md:hidden fixed inset-0 bg-brutal-bg z-[90] transition-transform duration-700 pt-32 px-10 border-b border-white/10 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex flex-col gap-8">
-          <div className="flex items-center gap-4 mb-8">
-            <span className="font-syncopate font-black text-3xl tracking-tighter text-white">APNA<span className="text-accent">SHASHANK</span></span>
-          </div>
           <ul className="flex flex-col gap-6">
             <li><a href="#archive" onClick={() => setMobileMenuOpen(false)} className="font-space font-black text-4xl tracking-tighter hover:text-accent transition-colors text-white uppercase">Work</a></li>
             <li><a href="#about" onClick={() => setMobileMenuOpen(false)} className="font-space font-black text-4xl tracking-tighter hover:text-accent transition-colors text-white uppercase">About</a></li>
