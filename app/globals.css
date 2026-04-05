@@ -107,8 +107,16 @@
     .brutal-nav.scrolled { min-width: 90%; }
   }
 
+  .font-signature {
+    font-family: var(--font-signature);
+  }
+
+  .font-hindi {
+    font-family: var(--font-hindi);
+  }
+
   .nav-logo {
-      font-family: var(--font-syncopate), 'Syncopate', sans-serif;
+      font-family: var(--font-syncopate);
       font-weight: 800;
       font-size: 2rem;
       letter-spacing: -2px;
