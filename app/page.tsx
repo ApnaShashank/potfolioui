@@ -31,11 +31,14 @@ import {
   Terminal,
   Box,
   Feather,
-  Anchor
+  Anchor,
+  Bot,
+  Rocket
 } from 'lucide-react';
 import Navbar from './components/Navbar';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const WorldGlobe = dynamic(() => import('@/components/Globe'), { ssr: false });
 import TextScramble from '@/components/TextScramble';
@@ -482,7 +485,7 @@ export default function Home() {
 
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10 preserve-3d">
           <div className="perspective-1000 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h1 className="hero-title group flex flex-col items-center lg:items-start font-syncopate text-[clamp(2.5rem,7vw,6.5rem)] font-black leading-[1] tracking-tight uppercase text-white mb-8 transition-all">
+            <h1 className="hero-title group flex flex-col items-center lg:items-start font-unbounded text-[clamp(2.5rem,7vw,6.5rem)] font-black leading-[0.9] tracking-tighter uppercase text-white mb-8 transition-all">
               <div className="relative">
                 {"SHASHANK"}
               </div>
@@ -492,8 +495,8 @@ export default function Home() {
             </h1>
             
             <p className="font-space text-sm lg:text-base text-white/50 max-w-md mb-10 leading-relaxed uppercase tracking-widest px-4 lg:px-0">
-                Creative Developer & Interaction Designer <br/>
-                Crafting digital experiences that defy gravity.
+                Full Stack Developer & AI Learner <br/>
+                Crafting clean, interactive, and user-first digital experiences.
             </p>
           </div>
           <div className="relative flex justify-center items-center py-12 lg:py-0">
@@ -511,11 +514,11 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
                 </div>
 
-                {/* Floating Badges Layer - Responsive Scaling and Position */}
-                <FloatingBadge text="Vibe Coder" icon={<Zap size={14}/>} className="top-[5%] -left-[2%] lg:-left-[15%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="Creative Mind" icon={<Feather size={14}/>} className="top-[35%] -right-[5%] lg:-right-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="Frontend Design" icon={<Layout size={14}/>} className="bottom-[25%] -left-[5%] lg:-left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="AI Learner" icon={<Cpu size={14}/>} className="bottom-[12%] -right-[2%] lg:-right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50" />
+                {/* Floating Badges Layer */}
+                <FloatingBadge text="Full Stack Dev" icon={<Zap size={14}/>} className="top-[5%] -left-[2%] lg:-left-[15%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="System Architect" icon={<Code size={14}/>} className="top-[35%] -right-[5%] lg:-right-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="Mobile Engineer" icon={<Smartphone size={14}/>} className="bottom-[25%] -left-[5%] lg:-left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="AI Research" icon={<Cpu size={14}/>} className="bottom-[12%] -right-[2%] lg:-right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50" />
                 
                 {/* Dynamic SVG Layer - Optimized (Removed blur, added will-change) */}
                 <div className="absolute w-[180%] h-[180%] -top-[40%] -left-[40%] -z-10 opacity-60 pointer-events-none bg-[radial-gradient(circle,rgba(204,255,0,0.08)_0%,transparent_60%)] rounded-full"></div>
@@ -537,7 +540,7 @@ export default function Home() {
         {/* Brutalist Tape Wrapper */}
         <div className="absolute bottom-12 left-[-10%] w-[120%] bg-accent text-black -rotate-[3deg] py-4 border-y-4 border-black shadow-2xl z-30 pointer-events-none">
             <div className="font-syncopate text-2xl lg:text-3xl font-black whitespace-nowrap animate-tape-scroll tracking-widest">
-                APNASHASHANK DIGITAL ✦ SCROLL VELOCITY ✦ INTERACTIVE SYSTEMS ✦ APNASHASHANK DIGITAL ✦ SCROLL VELOCITY ✦ INTERACTIVE SYSTEMS ✦ APNASHASHANK DIGITAL ✦ SCROLL VELOCITY ✦ INTERACTIVE SYSTEMS ✦
+                UI DESIGN ✦ FRONTEND ✦ INTERACTIONS ✦ PERFORMANCE ✦ USER EXPERIENCE ✦ CREATIVE DEV ✦ UI DESIGN ✦ FRONTEND ✦ INTERACTIONS ✦ PERFORMANCE ✦ USER EXPERIENCE ✦ CREATIVE DEV ✦
             </div>
         </div>
       </section>
@@ -604,18 +607,19 @@ export default function Home() {
               <span className="typing-cursor inline-block w-[2px] h-[1em] bg-accent ml-1 translate-y-1"></span>
             </h2>
             <div className="space-y-6 font-body text-lg text-white/50 leading-relaxed mb-12">
-              <p>With a background in cognitive psychology and visual arts, I bridge the gap between human behavior and digital interaction.</p>
-              <p>My approach is editorial; I believe every pixel should serve a purpose, much like a curated gallery piece.</p>
+              <p>I’m a Full Stack Developer and AI learner focused on creating clean, interactive, and user-first digital experiences.</p>
+              <p>I combine design thinking with modern development to build interfaces that not only look good, but feel smooth and intuitive.</p>
+              <p>Every project I work on is crafted with attention to detail, performance, and real user behavior.</p>
             </div>
             
             <div className="grid grid-cols-2 gap-12">
               <div>
-                <p className="font-headline text-5xl font-black text-primary"><span className="stat-number" data-target="8">0</span>+</p>
+                <p className="font-headline text-5xl font-black text-primary"><span className="stat-number" data-target="2">0</span>+</p>
                 <p className="font-label text-[10px] uppercase tracking-widest text-white/40 mt-3">Years Exp.</p>
               </div>
               <div>
-                <p className="font-headline text-5xl font-black text-primary"><span className="stat-number" data-target="150">0</span>+</p>
-                <p className="font-label text-[10px] uppercase tracking-widest text-white/40 mt-3">Projects Delivered</p>
+                <p className="font-headline text-5xl font-black text-primary"><span className="stat-number" data-target="100">0</span>+</p>
+                <p className="font-label text-[10px] uppercase tracking-widest text-white/40 mt-3">Repositories</p>
               </div>
             </div>
           </div>
@@ -625,10 +629,10 @@ export default function Home() {
       {/* 4. Stats Section */}
       <section className="py-24 bg-[#080808] border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-20 grid grid-cols-2 lg:grid-cols-4 gap-12">
-          <StatBox number="98" suffix="%" label="User Satisfaction" />
-          <StatBox number="35" suffix="+" label="Industry Awards" />
-          <StatBox number="12" suffix="M" label="Active Users" />
-          <StatBox number="400" suffix="+" label="Commitments" />
+          <StatBox number="10" suffix="+" label="Projects" />
+          <StatBox number="5" suffix="+" label="UI Concepts Built" />
+          <StatBox number="100" suffix="%" label="Responsive Designs" />
+          <StatBox number="100" suffix="%" label="SEO Friendly" />
         </div>
       </section>
 
@@ -646,37 +650,37 @@ export default function Home() {
             <SkillCard 
               span="lg:col-span-4 lg:row-span-2" 
               icon={<Palette size={36} />} 
-              title="Visual Design" 
-              description="High-end editorial aesthetics using typography-first systems, advanced grids, and tonal color theory to create premium digital identities." 
-              skills={['Figma', 'Theory', 'UI/UX']} 
+              title="UI Design" 
+              description="Clean, modern interfaces focused on usability and aesthetics." 
+              skills={['Figma', 'UI/UX', 'Design Systems']} 
             />
             <SkillCard 
               span="lg:col-span-2 lg:row-span-1" 
               icon={<Search size={36} />} 
               title="UX Strategy" 
-              description="Mapping behavioral psychology into frictionless digital paths through data-driven research." 
-              skills={['Research', 'Hotjar']} 
+              description="Designing user flows that improve engagement and clarity." 
+              skills={['User Flows', 'Research']} 
             />
             <SkillCard 
               span="lg:col-span-2 lg:row-span-1" 
               icon={<Cpu size={36} />} 
-              title="Interaction" 
-              description="High-performance motion architectures using GSAP and Framer to guide user attention." 
+              title="Interaction Design" 
+              description="Creating smooth animations and micro-interactions." 
               skills={['GSAP', 'Motion']} 
             />
             <SkillCard 
               span="lg:col-span-3 lg:row-span-1" 
               icon={<Code size={36} />} 
-              title="Engineering" 
-              description="Bridging the gap between design and production-ready architectures with pixel-perfect precision." 
+              title="Frontend Development" 
+              description="Building responsive, fast websites using HTML, CSS, JS, React." 
               skills={['React', 'Next.js', 'Typescript']} 
             />
             <SkillCard 
               span="lg:col-span-3 lg:row-span-1" 
               icon={<MousePointer2 size={36} />} 
               title="Prototyping" 
-              description="High-fidelity interactive simulations focused on micro-interactions and tactile physics." 
-              skills={['ProtoPie', 'Framer']} 
+              description="Turning ideas into interactive prototypes using Figma." 
+              skills={['Figma', 'Lottie']} 
             />
           </div>
         </div>
@@ -713,33 +717,56 @@ export default function Home() {
       {/* 7. Tools Section */}
       <section className="tools-section py-32 px-6 lg:px-20 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="font-headline text-3xl font-bold mb-16 opacity-30 uppercase tracking-[10px]">The Arsenal</h2>
-          <div className="flex flex-wrap justify-center gap-10 lg:gap-20">
-            <ToolItem icon={<Box size={50} />} label="Figma" />
-            <ToolItem icon={<Workflow size={50} />} label="React" />
-            <ToolItem icon={<Cpu size={50} />} label="GSAP" />
-            <ToolItem icon={<Feather size={50} />} label="Framer" />
-            <ToolItem icon={<Globe size={50} />} label="Webflow" />
-            <ToolItem icon={<Layers size={50} />} label="Spline" />
-            <ToolItem icon={<Activity size={50} />} label="Hotjar" />
+          <h2 className="font-headline text-3xl font-bold mb-6 opacity-30 uppercase tracking-[10px]">The Arsenal</h2>
+          <p className="font-body text-xl text-white/50 mb-16 max-w-2xl mx-auto tracking-wide">
+            Tools & technologies I use to craft digital experiences.
+          </p>
+          <div className="flex flex-wrap justify-center gap-10 lg:gap-14">
+            {/* Standard Technologies */}
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=html" alt="HTML5" className="w-[50px] h-[50px]" />} label="HTML5" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=css" alt="CSS3" className="w-[50px] h-[50px]" />} label="CSS3" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=js" alt="JS" className="w-[50px] h-[50px]" />} label="JavaScript" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=tailwind" alt="Tailwind" className="w-[50px] h-[50px]" />} label="Tailwind CSS" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=react" alt="React" className="w-[50px] h-[50px]" />} label="React.js" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=next" alt="Next" className="w-[50px] h-[50px]" />} label="Next.js" />
+            
+            {/* Motion & Design */}
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=gsap" alt="GSAP" className="w-[50px] h-[50px]" />} label="GSAP" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=framer" alt="Framer" className="w-[50px] h-[50px]" />} label="Framer Motion" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=figma" alt="Figma" className="w-[50px] h-[50px]" />} label="Figma" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=canva" alt="Canva" className="w-[50px] h-[50px]" />} label="Canva" />
+            
+            {/* Backend & Systems */}
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB" className="w-[50px] h-[50px]" />} label="MongoDB" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=py" alt="Python" className="w-[50px] h-[50px]" />} label="Python" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=git" alt="Git" className="w-[50px] h-[50px]" />} label="Git" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=github" alt="GitHub" className="w-[50px] h-[50px]" />} label="GitHub" />
+            <ToolItem icon={<img src="https://skillicons.dev/icons?i=supabase" alt="Supabase" className="w-[50px] h-[50px]" />} label="Supabase" />
+            
+            {/* Custom / AI Tools */}
+            <ToolItem icon={<Bot size={50} strokeWidth={2} />} label="Google Stitch" />
+            <ToolItem icon={<Rocket size={50} strokeWidth={2} />} label="Antigravity" />
           </div>
         </div>
       </section>
 
       {/* 8. Process Section */}
-      <section className="process-section py-32 px-6 lg:px-20 bg-[#0a0a0a] overflow-hidden">
-        <div className="max-w-5xl mx-auto relative px-10">
-          <h2 className="font-headline text-5xl lg:text-7xl font-bold mb-32 text-center">The Method</h2>
-          
-          <div className="absolute left-[50px] top-64 bottom-0 w-[2px] bg-outline-variant/5">
-            <div className="process-line w-full h-full bg-tertiary-fixed origin-top scale-y-0"></div>
+      <section className="process-section py-40 px-6 lg:px-20 bg-[#050505] border-y border-white/5">
+        <div className="max-w-7xl mx-auto relative">
+          <div className="flex flex-col md:flex-row justify-between flex-wrap gap-8 items-end mb-24">
+             <h2 className="font-unbounded text-6xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9]">
+               The<br/><span className="text-accent">Method</span>
+             </h2>
+             <p className="font-mono text-[10px] uppercase tracking-[4px] text-white/30 max-w-xs text-right">
+                4-Step systematic framework designed to maximize aesthetics and conversion.
+             </p>
           </div>
           
-          <div className="space-y-40">
-            <ProcessStep num="01" title="Discovery" desc="Deep diving into user behavior and market gaps to define the 'Digital North Star'." />
-            <ProcessStep num="02" title="Ideation" desc="Rapid wireframing and testing cognitive loads before pixel-pushing begins." />
-            <ProcessStep num="03" title="Execution" desc="Polishing visuals into high-fidelity mockups that merge luxury with utility." />
-            <ProcessStep num="04" title="Production" desc="Collaborating with engineering to ensure every transition is mathematically perfect." />
+          <div className="flex flex-col w-full border-t border-white/5">
+            <ProcessStep num="01" title="Discovery" desc="Understanding goals, users, and project vision." />
+            <ProcessStep num="02" title="Ideation" desc="Creating concepts and wireframes." />
+            <ProcessStep num="03" title="Execution" desc="Designing and developing the interface." />
+            <ProcessStep num="04" title="Launch" desc="Delivering optimized and ready-to-use product." />
           </div>
         </div>
       </section>
@@ -749,9 +776,9 @@ export default function Home() {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_rgba(204,255,0,0.15)_0%,transparent_70%)]"></div>
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20 relative z-10">
           <div className="w-full lg:w-1/2">
-            <p className="font-space tracking-[4px] uppercase text-accent mb-8">Selected Project 2024</p>
-            <h2 className="font-headline text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10">NEOBANK <br /><span className="text-white/20">PLATFORM</span></h2>
-            <p className="font-space text-xl opacity-50 mb-12 max-w-xl uppercase tracking-widest">A complete overhaul of the digital banking experience for creative entrepreneurs, resulting in 40% increased retention.</p>
+            <p className="font-space tracking-[4px] uppercase text-accent mb-8">Featured Case Study 2024</p>
+            <h2 className="font-headline text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10">SYNAPSE <br /><span className="text-white/20">ANALYTICS</span></h2>
+            <p className="font-space text-xl opacity-50 mb-12 max-w-xl uppercase tracking-widest">A high-performance AI dashboard that visualizes neural network training cycles in real-time, built for scaling engineering teams.</p>
             <a href="mailto:shashank8808108802@gmail.com" className="interactive bg-accent text-black px-10 py-6 rounded-2xl font-syncopate font-black text-xl hover:scale-105 transition-transform flex items-center justify-center gap-4">
               Explore Study <ArrowRight size={20} />
             </a>
@@ -786,15 +813,15 @@ export default function Home() {
               <PortfolioCard 
                 span={activeRow1 === 0 ? "flex-[7]" : "flex-[5]"} 
                 image="https://images.unsplash.com/photo-1618761767630-0114b392cf98?q=80&w=2070&auto=format&fit=crop" 
-                title="Nova Analytics" 
-                category="Product Design" 
+                title="Aura AI" 
+                category="AI / Machine Learning" 
                 onMouseEnter={() => setActiveRow1(0)}
               />
               <PortfolioCard 
                 span={activeRow1 === 1 ? "flex-[7]" : "flex-[5] md:mt-32"} 
-                image="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1935&auto=format&fit=crop" 
-                title="LuxeStay App" 
-                category="Mobile UI" 
+                image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" 
+                title="Vault Stream" 
+                category="Full Stack / Fintech" 
                 onMouseEnter={() => setActiveRow1(1)}
               />
             </div>
@@ -804,15 +831,15 @@ export default function Home() {
               <PortfolioCard 
                 span={activeRow2 === 0 ? "flex-[8]" : "flex-[4]"} 
                 image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" 
-                title="Pulse AI" 
-                category="UX Audit" 
+                title="Pulse Edge" 
+                category="IoT / Web Architecture" 
                 onMouseEnter={() => setActiveRow2(0)}
               />
               <PortfolioCard 
-                span={activeRow2 === 1 ? "flex-[8]" : "flex-[4]"} 
-                image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" 
-                title="Creative Atelier" 
-                category="Visual Brand" 
+                span={activeRow2 === 1 ? "flex-[7]" : "flex-[5] md:mt-32"} 
+                image="https://images.unsplash.com/photo-1551288049-bbda486c2ad0?q=80&w=2070&auto=format&fit=crop" 
+                title="Cloud Core" 
+                category="DevOps / Systems" 
                 onMouseEnter={() => setActiveRow2(1)}
               />
             </div>
@@ -953,9 +980,9 @@ export default function Home() {
           >
             LET'S <br /> CREATE <br /> <span className="text-accent">ICONIC</span>
           </h2>
-          <a href="mailto:shashank8808108802@gmail.com" className="interactive inline-block bg-accent text-black px-12 py-8 rounded-full font-syncopate font-black text-2xl hover:scale-110 transition-transform shadow-[0_0_50px_rgba(204,255,0,0.3)]">
-            START A PROJECT
-          </a>
+          <Link href="/contact" className="interactive inline-block bg-accent text-black px-12 py-8 rounded-full font-syncopate font-black text-2xl hover:scale-110 transition-transform shadow-[0_0_50px_rgba(204,255,0,0.3)]">
+            Built My Website
+          </Link>
         </div>
 
         {/* Mega Name + Footer Bar */}
@@ -1004,10 +1031,10 @@ export default function Home() {
 
           {/* Bottom Bar */}
           <div className="border-t border-white/5 py-6 px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">© 2024 SHASHANK GUPTA — BORN IN DELHI, SCALING GLOBALLY</p>
+            <p className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">© 2026 SHASHANK GUPTA — BORN IN INDIA, SCALING GLOBALLY</p>
             <div className="flex gap-4 items-center">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-              <span className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">AVAILABLE FOR NEW VENTURES</span>
+              <span className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">AVAILABLE FOR NEW OPPORTUNITIES</span>
             </div>
           </div>
         </div>
@@ -1133,13 +1160,34 @@ function ToolItem({ icon, label }: { icon: React.ReactNode, label: string }) {
 
 function ProcessStep({ num, title, desc }: { num: string, title: string, desc: string }) {
   return (
-    <div className="relative flex flex-col md:flex-row items-center gap-12 group">
-      <div className="w-20 h-20 rounded-full bg-[#1a1a1a] flex items-center justify-center font-headline font-black text-2xl z-10 shrink-0 group-hover:bg-accent group-hover:text-black transition-all duration-500 group-hover:scale-110 text-white">
-        {num}
+    <div className="relative group w-full py-16 lg:py-20 border-b border-white/5 cursor-crosshair overflow-hidden">
+      {/* Subtle Background Number */}
+      <div className="absolute top-1/2 -translate-y-1/2 left-0 font-unbounded text-[20vw] font-black text-white/[0.02] group-hover:text-accent/[0.04] transition-colors duration-700 pointer-events-none select-none z-0">
+        0{num.replace('0', '')}
       </div>
-      <div className="text-center md:text-left">
-        <h3 className="font-headline text-3xl lg:text-4xl font-bold text-white mb-4">{title}</h3>
-        <p className="font-body text-xl text-white/50 max-w-xl">{desc}</p>
+      
+      {/* Content Container */}
+      <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 pl-0 lg:pl-10 group-hover:pl-4 lg:group-hover:pl-20 transition-all duration-700 ease-out">
+        
+        <div className="flex items-center gap-6 lg:gap-12">
+          <div className="w-12 h-12 lg:w-20 lg:h-20 rounded-full border border-white/10 flex items-center justify-center font-mono text-sm lg:text-xl text-white/40 group-hover:border-accent/40 group-hover:bg-accent/10 group-hover:text-accent transition-all duration-700 bg-[#0a0a0a]">
+            {num}
+          </div>
+          <h3 className="font-unbounded text-4xl lg:text-6xl font-black text-white group-hover:text-accent transition-colors duration-500 uppercase tracking-tighter">
+            {title}
+          </h3>
+        </div>
+        
+        <div className="w-full lg:w-1/3 flex items-center justify-between gap-8 pl-16 lg:pl-0">
+          <p className="font-body text-lg lg:text-2xl text-white/30 group-hover:text-white/80 transition-colors duration-500 leading-relaxed max-w-sm">
+            {desc}
+          </p>
+          
+          <div className="hidden md:flex w-16 h-16 rounded-2xl bg-[#111] items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-10 group-hover:translate-x-0 transition-all duration-700 shrink-0">
+            <ArrowRight className="text-accent" size={32} />
+          </div>
+        </div>
+        
       </div>
     </div>
   );
