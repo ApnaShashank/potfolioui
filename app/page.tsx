@@ -33,6 +33,10 @@ import {
   Feather,
   Anchor,
   Bot,
+  ShoppingCart,
+  Rotate3D,
+  Heart,
+  Eye,
   Rocket
 } from 'lucide-react';
 import Navbar from './components/Navbar';
@@ -60,6 +64,46 @@ export default function Home() {
   const footerRef = useRef<HTMLElement>(null);
   const footerTextRef = useRef<HTMLHeadingElement>(null);
   const footerBgRef = useRef<HTMLDivElement>(null);
+
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(842);
+  const [viewCount, setViewCount] = useState(0);
+
+  // Initialize data
+  React.useEffect(() => {
+    // Simulated views
+    const savedViews = localStorage.getItem('portfolio-views');
+    const newViews = savedViews ? parseInt(savedViews) + 1 : 1245;
+    setViewCount(newViews);
+    localStorage.setItem('portfolio-views', newViews.toString());
+
+    // Likes persistence
+    const savedLike = localStorage.getItem('portfolio-liked');
+    if (savedLike === 'true') {
+      setIsLiked(true);
+      setLikeCount(prev => prev + 1);
+    }
+  }, []);
+
+  const handleLike = () => {
+    if (isLiked) {
+      setIsLiked(false);
+      setLikeCount(prev => prev - 1);
+      localStorage.setItem('portfolio-liked', 'false');
+    } else {
+      setIsLiked(true);
+      setLikeCount(prev => prev + 1);
+      localStorage.setItem('portfolio-liked', 'true');
+      
+      // Dramatic feedback animation
+      gsap.timeline()
+        .to(".heart-icon", { scale: 1.8, duration: 0.1, ease: "power2.out" })
+        .to(".heart-icon", { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+        
+      // Optional: Log to simulate "working" backend feel
+      console.log("Activity: Like registered successfully.");
+    }
+  };
 
   useGSAP(() => {
     // 1. Hero Reveal Animation
@@ -343,15 +387,17 @@ export default function Home() {
     }
 
     // 13. Experience Items Stagger
-    gsap.from(".experience-item", {
+    // 13. Experience Items & Text Stagger
+    gsap.from(".experience-reveal, .experience-item", {
       scrollTrigger: {
         trigger: ".experience-section",
         start: "top 80%",
       },
-      y: 30,
+      y: 50,
       opacity: 0,
-      stagger: 0.2,
-      duration: 0.8,
+      stagger: 0.1,
+      duration: 1,
+      ease: "power3.out",
     });
 
     // 14. Footer Section Unified Parallax
@@ -691,25 +737,61 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-24 text-center md:text-left gap-8">
             <h2 className="font-headline text-4xl lg:text-7xl font-bold text-white uppercase tracking-tighter">Solutions Provided</h2>
-            <a href="mailto:shashank8808108802@gmail.com" className="interactive group flex items-center gap-4 font-syncopate font-bold text-xl text-accent hover:text-white transition-colors">
+            <Link href="/contact" className="interactive group flex items-center gap-4 font-syncopate font-bold text-xl text-accent hover:text-white transition-colors">
               Request a Custom Solution
               <ChevronRight className="group-hover:translate-x-2 transition-transform" />
-            </a>
+            </Link>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <ServiceCard 
-              icon={<Layout size={40} className="text-primary" />}
-              title="Product OS Design"
-              description="Building full-scale design systems that empower teams to ship faster with consistent visual quality."
-              points={['Atomic Design Systems', 'Component Libraries', 'Documentation']}
-            />
-            <ServiceCard 
-              icon={<Zap size={40} className="text-secondary-fixed-dim" />}
-              title="Identity & Branding"
-              description="Crafting digital-first identities that resonate with Gen-Z and modern creative markets."
-              points={['Visual Direction', 'Micro-branding', 'Motion Guidelines']}
-            />
+          <div className="flex overflow-x-auto pb-12 gap-8 snap-x snap-mandatory no-scrollbar group cursor-grab active:cursor-grabbing">
+            <div className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+              <ServiceCard 
+                icon={<Layout size={40} className="text-accent" />}
+                title="Landing Page Design"
+                description="High-converting, performance-driven layouts designed to turn visitors into loyal customers."
+                points={['Conversion Optimization', 'A/B Test Ready', 'Mobile First']}
+              />
+            </div>
+            <div className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+              <ServiceCard 
+                icon={<UserCheck size={40} className="text-secondary-fixed-dim" />}
+                title="Portfolio Websites"
+                description="Tailor-made digital archives for creators and professionals to showcase their work iconically."
+                points={['Personal Branding', 'Unique Storytelling', 'Asset Optimization']}
+              />
+            </div>
+            <div className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+              <ServiceCard 
+                icon={<Briefcase size={40} className="text-primary" />}
+                title="Business Websites"
+                description="Professional, scalable web solutions that establish authority and streamline digital operations."
+                points={['Scalable Architecture', 'SEO Focused', 'Admin Dashboards']}
+              />
+            </div>
+            <div className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+              <ServiceCard 
+                icon={<ShoppingCart size={40} className="text-accent" />}
+                title="Ecommerce Websites"
+                description="Full-scale online stores built for high volume, secure payments, and seamless shopping."
+                points={['Secure Checkout', 'Inventory Management', 'Payment Gateways']}
+              />
+            </div>
+            <div className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+              <ServiceCard 
+                icon={<Rotate3D size={40} className="text-secondary-fixed-dim" />}
+                title="UI Redesign"
+                description="Modernizing legacy platforms with cutting-edge aesthetics and improved user flows."
+                points={['UX Overhaul', 'Accessibility Audit', 'Modern Tech Stack']}
+              />
+            </div>
+            <div className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+              <ServiceCard 
+                icon={<Activity size={40} className="text-primary" />}
+                title="Interactive Concepts"
+                description="Experimental UI designs that push the limits of web interaction and motion design."
+                points={['GSAP Animations', '3D Integration', 'Sensory UX']}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -731,8 +813,8 @@ export default function Home() {
             <ToolItem icon={<img src="https://skillicons.dev/icons?i=next" alt="Next" className="w-[50px] h-[50px]" />} label="Next.js" />
             
             {/* Motion & Design */}
-            <ToolItem icon={<img src="https://skillicons.dev/icons?i=gsap" alt="GSAP" className="w-[50px] h-[50px]" />} label="GSAP" />
-            <ToolItem icon={<img src="https://skillicons.dev/icons?i=framer" alt="Framer" className="w-[50px] h-[50px]" />} label="Framer Motion" />
+            <ToolItem icon={<img src="https://cdn.simpleicons.org/greensock" alt="GSAP" className="w-[50px] h-[50px]" />} label="GSAP" />
+            <ToolItem icon={<img src="https://cdn.simpleicons.org/framer/white" alt="Framer" className="w-[50px] h-[50px]" />} label="Framer Motion" />
             <ToolItem icon={<img src="https://skillicons.dev/icons?i=figma" alt="Figma" className="w-[50px] h-[50px]" />} label="Figma" />
             <ToolItem icon={<img src="https://skillicons.dev/icons?i=canva" alt="Canva" className="w-[50px] h-[50px]" />} label="Canva" />
             
@@ -927,17 +1009,19 @@ export default function Home() {
 
         <div className="max-w-[90rem] mx-auto flex flex-col lg:flex-row gap-16 lg:gap-8 items-center">
           
-          {/* Timeline side (Right side on desktop, top on mobile) */}
-          <div className="w-full lg:w-[45%] order-2 lg:order-1 px-4 lg:px-0">
-            <h2 className="font-headline text-4xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tighter">The <span className="text-accent">Journey</span></h2>
-            <p className="font-space text-[10px] lg:text-xs uppercase tracking-[5px] text-white/50 mb-16 max-w-sm">
-               Rooted in India, delivering iconic digital experiences globally.
+          {/* Timeline side (Left side on desktop, top on mobile) */}
+          <div className="w-full lg:w-[45%] order-2 lg:order-1 px-4 lg:px-0 relative z-20">
+            <h2 className="experience-reveal font-headline text-4xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tighter">
+              The <span className="text-accent">Journey</span>
+            </h2>
+            <p className="experience-reveal font-space text-xs lg:text-sm uppercase tracking-[4px] text-white/70 mb-16 max-w-sm leading-relaxed">
+               Education, experience, and continuous skill development.
             </p>
 
             <div className="space-y-4">
-              <ExperienceItem date="2021 — PRESENT" role="Vibe Coder / Freelancer" co="Independent Studio" loc="Delhi, India" />
-              <ExperienceItem date="2018 — 2021" role="Senior UI Developer" co="Digital Alchemy" loc="New Delhi, India" />
-              <ExperienceItem date="2016 — 2018" role="Interaction Designer" co="Creative Pulsar" loc="NCR, India" />
+              <ExperienceItem date="2024 — PRESENT" role="BCA Graduation" co="Shoolini University" loc="Solan, Himachal Pradesh, India" />
+              <ExperienceItem date="2025 — 2026" role="FullStack (Internship)" co="Cepialabs Pvt Ltd" loc="New Delhi, India" />
+              <ExperienceItem date="2025 — PRESENT" role="Full Stack Development" co="Sheryians Coding School" loc="Bhopal , India" />
             </div>
           </div>
 
@@ -1029,12 +1113,37 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="border-t border-white/5 py-6 px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">© 2026 SHASHANK GUPTA — BORN IN INDIA, SCALING GLOBALLY</p>
+          {/* Bottom Bar — Enhanced with Like & Views */}
+          <div className="border-t border-white/5 py-10 px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-10">
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12">
+              <p className="text-[10px] lg:text-xs uppercase tracking-[4px] text-white/40 font-medium">© 2026 SHASHANK GUPTA — BORN IN INDIA, SCALING GLOBALLY</p>
+              
+              <div className="flex items-center gap-8">
+                 {/* Views Counter */}
+                 <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/[0.03] border border-white/5 group/stat">
+                    <Eye size={20} className="text-white/20 group-hover/stat:text-accent transition-colors" />
+                    <span className="text-xs font-mono text-white/60 tracking-widest">{viewCount.toLocaleString()} VIEWS</span>
+                 </div>
+
+                 {/* Like Button */}
+                 <button 
+                  onClick={handleLike}
+                  className={`flex items-center gap-3 px-6 py-3 rounded-2xl border transition-all duration-500 group/like outline-none animate-float-subtle ${isLiked ? 'bg-accent/10 border-accent/40 animate-glow-pulse shadow-[0_0_20px_rgba(163,255,18,0.3)]' : 'bg-white/[0.03] border-white/5 hover:border-accent/40'}`}
+                 >
+                    <Heart 
+                      size={20} 
+                      className={`heart-icon transition-all duration-300 ${isLiked ? 'fill-accent text-accent animate-pulse' : 'text-white/20 group-hover/like:text-accent'}`} 
+                    />
+                    <span className={`text-xs font-mono tracking-widest transition-colors ${isLiked ? 'text-accent font-bold' : 'text-white/60 group-hover/like:text-accent'}`}>
+                      {likeCount.toLocaleString()} LIKES
+                    </span>
+                 </button>
+              </div>
+            </div>
+
             <div className="flex gap-4 items-center">
-              <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-              <span className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">AVAILABLE FOR NEW OPPORTUNITIES</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(163,255,18,0.5)]"></span>
+              <span className="text-xs uppercase tracking-[4px] text-white/40 font-medium tracking-widest">AVAILABLE FOR NEW OPPORTUNITIES</span>
             </div>
           </div>
         </div>
