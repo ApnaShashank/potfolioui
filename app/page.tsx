@@ -38,6 +38,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
 const WorldGlobe = dynamic(() => import('@/components/Globe'), { ssr: false });
+import TextScramble from '@/components/TextScramble';
 
 // Register plugins
 if (typeof window !== "undefined") {
@@ -548,41 +549,36 @@ export default function Home() {
           </p>
       </section>
 
-      {/* 3. Brutalist Text Section 2 */}
-      <section className="min-h-[50vh] bg-[#080808] flex items-center justify-end px-6 py-20 lg:p-[10vw] border-t border-[#222] text-right">
-          <p className="font-space font-light text-[clamp(3rem,6vw,5rem)] leading-[1] text-[#444] tracking-tight">
-              INTERACTION<br/>
-              <span className="text-accent font-bold">REDEFINED</span>
-          </p>
-      </section>
+      {/* 2. Interaction Section (Scramble) */}
+      <TextScramble />
       </div>
 
       {/* 2. Marquee Section */}
-      <div className="py-16 bg-surface-container-low border-y border-outline-variant/10 overflow-hidden relative">
+      <div className="py-16 bg-[#030303] border-y border-white/5 overflow-hidden relative">
         <div className="marquee-inner flex gap-24 items-center whitespace-nowrap">
           {[1, 2, 3].map((i) => (
             <React.Fragment key={i}>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20">FIGMA</span>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20 text-tertiary-fixed">●</span>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20">NEXT.JS</span>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20 text-tertiary-fixed">●</span>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20">GSAP</span>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20 text-tertiary-fixed">●</span>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20">SPLINE</span>
-              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-20 text-tertiary-fixed">●</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10">FIGMA</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10 text-accent">●</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10">NEXT.JS</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10 text-accent">●</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10">GSAP</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10 text-accent">●</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10">SPLINE</span>
+              <span className="font-headline text-4xl lg:text-6xl font-black tracking-tighter opacity-10 text-accent">●</span>
             </React.Fragment>
           ))}
         </div>
       </div>
 
       {/* 3. About Section */}
-      <section className="about-section py-32 px-6 lg:px-20 bg-surface">
+      <section className="about-section py-32 px-6 lg:px-20 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div ref={aboutImageRef} className="about-image relative group cursor-none">
-            <div className="absolute -inset-4 bg-tertiary-fixed/10 rounded-[4rem] blur-2xl group-hover:bg-tertiary-fixed/20 transition-all duration-700"></div>
-            <div className="relative aspect-square bg-surface-container-low rounded-[4rem] p-12 overflow-hidden flex items-center justify-center">
+            <div className="absolute -inset-4 bg-tertiary-fixed/5 rounded-[4rem] blur-2xl group-hover:bg-tertiary-fixed/10 transition-all duration-700"></div>
+            <div className="relative aspect-square bg-[#111] rounded-[4rem] p-12 overflow-hidden flex items-center justify-center">
               {/* Fluid Blob */}
-              <svg ref={aboutBlobRef} className="w-full h-full opacity-30 will-change-transform" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <svg ref={aboutBlobRef} className="w-full h-full opacity-20 will-change-transform" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                 <path d="M44.7,-76.4C58.1,-69.2,69.5,-57.4,76.5,-43.3C83.5,-29.2,86.1,-12.8,83.9,2.8C81.7,18.4,74.7,33.2,64.8,45.8C54.9,58.4,42.1,68.8,27.8,74.4C13.5,80.1,-2.3,81,-17.8,77.5C-33.3,74,-48.5,66.1,-60.2,54.4C-71.9,42.7,-80,27.2,-81.8,11.1C-83.6,-5,-79,-21.7,-70.7,-35.8C-62.4,-50,-50.4,-61.6,-36.8,-68.7C-23.2,-75.8,-8.1,-78.4,7.3,-84.7C22.7,-91.1,44.7,-76.4,44.7,-76.4Z" fill="#A3FF12" transform="translate(100 100)"></path>
               </svg>
               
@@ -605,9 +601,9 @@ export default function Home() {
               {"I curate interfaces that speak before they function.".split("").map((char, i) => (
                 <span key={i} className="typing-char opacity-0">{char}</span>
               ))}
-              <span className="typing-cursor inline-block w-[2px] h-[1em] bg-primary ml-1 translate-y-1"></span>
+              <span className="typing-cursor inline-block w-[2px] h-[1em] bg-accent ml-1 translate-y-1"></span>
             </h2>
-            <div className="space-y-6 font-body text-lg text-on-surface-variant leading-relaxed mb-12">
+            <div className="space-y-6 font-body text-lg text-white/50 leading-relaxed mb-12">
               <p>With a background in cognitive psychology and visual arts, I bridge the gap between human behavior and digital interaction.</p>
               <p>My approach is editorial; I believe every pixel should serve a purpose, much like a curated gallery piece.</p>
             </div>
@@ -615,11 +611,11 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-12">
               <div>
                 <p className="font-headline text-5xl font-black text-primary"><span className="stat-number" data-target="8">0</span>+</p>
-                <p className="font-label text-[10px] uppercase tracking-widest text-secondary mt-3">Years Exp.</p>
+                <p className="font-label text-[10px] uppercase tracking-widest text-white/40 mt-3">Years Exp.</p>
               </div>
               <div>
                 <p className="font-headline text-5xl font-black text-primary"><span className="stat-number" data-target="150">0</span>+</p>
-                <p className="font-label text-[10px] uppercase tracking-widest text-secondary mt-3">Projects Delivered</p>
+                <p className="font-label text-[10px] uppercase tracking-widest text-white/40 mt-3">Projects Delivered</p>
               </div>
             </div>
           </div>
@@ -715,9 +711,9 @@ export default function Home() {
       </section>
 
       {/* 7. Tools Section */}
-      <section className="tools-section py-32 px-6 lg:px-20 bg-surface">
+      <section className="tools-section py-32 px-6 lg:px-20 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="font-headline text-3xl font-bold mb-16 opacity-50 uppercase tracking-[10px]">The Arsenal</h2>
+          <h2 className="font-headline text-3xl font-bold mb-16 opacity-30 uppercase tracking-[10px]">The Arsenal</h2>
           <div className="flex flex-wrap justify-center gap-10 lg:gap-20">
             <ToolItem icon={<Box size={50} />} label="Figma" />
             <ToolItem icon={<Workflow size={50} />} label="React" />
@@ -731,11 +727,11 @@ export default function Home() {
       </section>
 
       {/* 8. Process Section */}
-      <section className="process-section py-32 px-6 lg:px-20 bg-surface overflow-hidden">
+      <section className="process-section py-32 px-6 lg:px-20 bg-[#0a0a0a] overflow-hidden">
         <div className="max-w-5xl mx-auto relative px-10">
           <h2 className="font-headline text-5xl lg:text-7xl font-bold mb-32 text-center">The Method</h2>
           
-          <div className="absolute left-[50px] top-64 bottom-0 w-[2px] bg-outline-variant/10">
+          <div className="absolute left-[50px] top-64 bottom-0 w-[2px] bg-outline-variant/5">
             <div className="process-line w-full h-full bg-tertiary-fixed origin-top scale-y-0"></div>
           </div>
           
@@ -777,11 +773,11 @@ export default function Home() {
       </section>
 
       {/* 10. Portfolio Showcase Grid */}
-      <section id="archive" className="py-32 px-6 lg:px-20 bg-surface">
+      <section id="archive" className="py-32 px-6 lg:px-20 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-24">
-            <h2 className="font-headline text-4xl lg:text-6xl font-bold">The Archive</h2>
-            <p className="font-label text-xs uppercase tracking-[3px] text-secondary pb-4">Scroll to Explore</p>
+            <h2 className="font-headline text-4xl lg:text-6xl font-bold text-white">The Archive</h2>
+            <p className="font-label text-xs uppercase tracking-[3px] text-white/40 pb-4">Scroll to Explore</p>
           </div>
           
           <div className="flex flex-col gap-10 lg:gap-16">
@@ -825,19 +821,19 @@ export default function Home() {
       </section>
 
       {/* 11. Interactive Prototypes [NEW] */}
-      <section ref={prototypeRef} className="prototype-section py-32 px-6 lg:px-20 bg-surface-container-low overflow-hidden">
+      <section ref={prototypeRef} className="prototype-section py-32 px-6 lg:px-20 bg-[#080808] overflow-hidden border-y border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
           <div className="w-full lg:w-1/2">
-            <h2 className="font-headline text-4xl lg:text-6xl font-bold mb-8">Live Playground</h2>
-            <p className="font-body text-xl text-on-surface-variant leading-relaxed opacity-70 mb-12">Step into a live ecosystem of previous works. This sandbox demonstrates how I maintain fluid physics and high-end aesthetics across diverse digital platforms.</p>
+            <h2 className="font-headline text-4xl lg:text-6xl font-bold text-white mb-8">Live Playground</h2>
+            <p className="font-body text-xl text-white/50 leading-relaxed mb-12">Step into a live ecosystem of previous works. This sandbox demonstrates how I maintain fluid physics and high-end aesthetics across diverse digital platforms.</p>
             <div className="space-y-8">
               <div className="flex items-center gap-6 group">
                 <div className="w-14 h-14 rounded-full bg-tertiary-fixed flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <Smartphone className="text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-headline font-bold text-xl">Spatial Transitions</h4>
-                  <p className="text-secondary">Ensuring the user never feels lost during state changes.</p>
+                  <h4 className="font-headline font-bold text-xl text-white">Spatial Transitions</h4>
+                  <p className="text-white/40">Ensuring the user never feels lost during state changes.</p>
                 </div>
               </div>
               <div className="flex items-center gap-6 group">
@@ -845,8 +841,8 @@ export default function Home() {
                   <Activity className="text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-headline font-bold text-xl">Micro-interactions</h4>
-                  <p className="text-secondary">Defining how every button clicks and every menu slides.</p>
+                  <h4 className="font-headline font-bold text-xl text-white">Micro-interactions</h4>
+                  <p className="text-white/40">Defining how every button clicks and every menu slides.</p>
                 </div>
               </div>
             </div>
@@ -854,7 +850,7 @@ export default function Home() {
           <div className="w-full lg:w-1/2 flex justify-center py-20 relative">
             <div className="w-[300px] h-[600px] bg-black rounded-[3.5rem] p-4 relative shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-[8px] border-black overflow-hidden z-10">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-6 bg-black rounded-b-3xl z-30"></div>
-              <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative group/phone">
+              <div className="w-full h-full bg-[#111] rounded-[2.5rem] overflow-hidden relative group/phone">
                 {showIframe ? (
                   <iframe 
                     src="https://shashankguptadot.vercel.app/" 
@@ -881,7 +877,7 @@ export default function Home() {
       </section>
 
       {/* 12. Testimonials Section [NEW] */}
-      <section className="py-32 bg-surface overflow-hidden border-y border-outline-variant/10">
+      <section className="py-32 bg-[#030303] overflow-hidden border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-20 mb-20 text-center">
           <h2 className="font-headline text-3xl font-bold opacity-30 uppercase tracking-[15px]">Industry Trust</h2>
         </div>
@@ -939,7 +935,7 @@ export default function Home() {
       {/* 14. CTA + Footer — Unified Section */}
       <footer 
         ref={footerRef}
-        className="relative overflow-hidden bg-primary-container"
+        className="relative overflow-hidden bg-[#030303]"
       >
         {/* Dot Grid Background — Opposite Parallax */}
         <div 
@@ -1008,10 +1004,10 @@ export default function Home() {
 
           {/* Bottom Bar */}
           <div className="border-t border-white/5 py-6 px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[10px] uppercase tracking-[4px] text-white/20 font-medium">© 2024 SHASHANK GUPTA — BORN IN DELHI, SCALING GLOBALLY</p>
+            <p className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">© 2024 SHASHANK GUPTA — BORN IN DELHI, SCALING GLOBALLY</p>
             <div className="flex gap-4 items-center">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-              <span className="text-[10px] uppercase tracking-[4px] text-white/20 font-medium">AVAILABLE FOR NEW VENTURES</span>
+              <span className="text-[10px] uppercase tracking-[4px] text-white/40 font-medium">AVAILABLE FOR NEW VENTURES</span>
             </div>
           </div>
         </div>
@@ -1067,7 +1063,7 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
   return (
     <div
       ref={cardRef}
-      className={`skill-card relative ${span} bg-surface-container-low p-10 lg:p-12 rounded-[3.5rem] border border-outline-variant/10 hover:bg-surface-container-highest transition-colors duration-700 group overflow-hidden`}
+      className={`skill-card relative ${span} bg-[#0a0a0a] p-10 lg:p-12 rounded-[3.5rem] border border-white/5 hover:bg-[#111] transition-colors duration-700 group overflow-hidden`}
     >
       {/* Background Reactive Mesh */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-1000 pointer-events-none">
@@ -1083,15 +1079,15 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
 
       <div className="relative z-10 h-full flex flex-col justify-between">
         <div>
-          <div className="w-20 h-20 bg-surface-container-highest rounded-3xl flex items-center justify-center mb-10 group-hover:bg-primary transition-all duration-700 group-hover:rotate-6 group-hover:scale-110 shadow-lg">
-            <div className="text-primary group-hover:text-tertiary-fixed transition-colors duration-700">{icon}</div>
+          <div className="w-20 h-20 bg-[#1a1a1a] rounded-3xl flex items-center justify-center mb-10 group-hover:bg-accent transition-all duration-700 group-hover:rotate-6 group-hover:scale-110 shadow-lg">
+            <div className="text-primary group-hover:text-black transition-colors duration-700">{icon}</div>
           </div>
-          <h3 className="font-headline text-3xl lg:text-4xl font-bold mb-6 tracking-tight">{title}</h3>
-          <p className="font-body text-xl text-on-surface-variant leading-relaxed mb-10 opacity-70 group-hover:opacity-100 transition-opacity">{description}</p>
+          <h3 className="font-headline text-3xl lg:text-4xl font-bold text-white mb-6 tracking-tight">{title}</h3>
+          <p className="font-body text-xl text-white/50 leading-relaxed mb-10 group-hover:text-white/80 transition-opacity">{description}</p>
         </div>
         <div className="flex flex-wrap gap-3">
           {skills.map(skill => (
-            <span key={skill} className="px-5 py-2 rounded-full bg-surface-container-highest border border-outline-variant/10 text-[10px] font-black uppercase tracking-[3px] text-secondary group-hover:border-primary/20 transition-colors">
+            <span key={skill} className="px-5 py-2 rounded-full bg-[#1a1a1a] border border-white/5 text-[10px] font-black uppercase tracking-[3px] text-white/40 group-hover:border-accent/20 transition-colors">
               {skill}
             </span>
           ))}
@@ -1106,16 +1102,16 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
 
 function ServiceCard({ icon, title, description, points }: { icon: React.ReactNode, title: string, description: string, points: string[] }) {
   return (
-    <div className="service-card bg-surface p-12 lg:p-16 rounded-[4rem] border border-outline-variant/10 hover:border-tertiary-fixed transition-all duration-700 h-full flex flex-col justify-between">
+    <div className="service-card bg-[#0a0a0a] p-12 lg:p-16 rounded-[4rem] border border-white/5 hover:border-accent/50 transition-all duration-700 h-full flex flex-col justify-between">
       <div>
         <div className="mb-10 scale-125 origin-left">{icon}</div>
-        <h3 className="font-headline text-3xl lg:text-4xl font-bold mb-6">{title}</h3>
-        <p className="font-body text-xl text-on-surface-variant leading-relaxed mb-10 opacity-70">{description}</p>
+        <h3 className="font-headline text-3xl lg:text-4xl font-bold text-white mb-6">{title}</h3>
+        <p className="font-body text-xl text-white/50 leading-relaxed mb-10">{description}</p>
       </div>
       <div className="flex flex-wrap gap-4">
         {points.map(p => (
-          <div key={p} className="flex items-center gap-2 font-label text-xs uppercase tracking-widest text-secondary">
-            <div className="w-1.5 h-1.5 rounded-full bg-tertiary-fixed"></div>
+          <div key={p} className="flex items-center gap-2 font-label text-xs uppercase tracking-widest text-white/40">
+            <div className="w-1.5 h-1.5 rounded-full bg-accent"></div>
             {p}
           </div>
         ))}
@@ -1127,10 +1123,10 @@ function ServiceCard({ icon, title, description, points }: { icon: React.ReactNo
 function ToolItem({ icon, label }: { icon: React.ReactNode, label: string }) {
   return (
     <div className="tool-icon flex flex-col items-center gap-6 group">
-      <div className="text-on-surface-variant transition-all duration-500 group-hover:text-primary group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-50 group-hover:opacity-100">
+      <div className="text-white/30 transition-all duration-500 group-hover:text-accent group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-50 group-hover:opacity-100">
         {icon}
       </div>
-      <p className="font-label text-[10px] tracking-[4px] uppercase text-secondary group-hover:text-primary transition-colors opacity-0 group-hover:opacity-100">{label}</p>
+      <p className="font-label text-[10px] tracking-[4px] uppercase text-white/20 group-hover:text-accent transition-colors opacity-0 group-hover:opacity-100">{label}</p>
     </div>
   );
 }
@@ -1138,12 +1134,12 @@ function ToolItem({ icon, label }: { icon: React.ReactNode, label: string }) {
 function ProcessStep({ num, title, desc }: { num: string, title: string, desc: string }) {
   return (
     <div className="relative flex flex-col md:flex-row items-center gap-12 group">
-      <div className="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center font-headline font-black text-2xl z-10 shrink-0 group-hover:bg-tertiary-fixed group-hover:text-primary transition-all duration-500 group-hover:scale-110">
+      <div className="w-20 h-20 rounded-full bg-[#1a1a1a] flex items-center justify-center font-headline font-black text-2xl z-10 shrink-0 group-hover:bg-accent group-hover:text-black transition-all duration-500 group-hover:scale-110 text-white">
         {num}
       </div>
       <div className="text-center md:text-left">
-        <h3 className="font-headline text-3xl lg:text-4xl font-bold mb-4">{title}</h3>
-        <p className="font-body text-xl text-on-surface-variant max-w-xl opacity-70">{desc}</p>
+        <h3 className="font-headline text-3xl lg:text-4xl font-bold text-white mb-4">{title}</h3>
+        <p className="font-body text-xl text-white/50 max-w-xl">{desc}</p>
       </div>
     </div>
   );
@@ -1155,7 +1151,7 @@ function PortfolioCard({ span, image, title, category, onMouseEnter }: { span: s
       className={`${span} portfolio-item interactive group transition-all duration-700 ease-in-out`}
       onMouseEnter={onMouseEnter}
     >
-      <div className="relative rounded-[3rem] overflow-hidden bg-surface-container-low aspect-[4/3] mb-8 shadow-xl">
+      <div className="relative rounded-[3rem] overflow-hidden bg-[#050505] aspect-[4/3] mb-8 shadow-xl">
         <Image 
           src={image} 
           alt={title} 
@@ -1172,8 +1168,8 @@ function PortfolioCard({ span, image, title, category, onMouseEnter }: { span: s
       </div>
       <div className="flex justify-between items-center px-4">
         <div>
-          <p className="font-label text-[10px] uppercase tracking-widest text-secondary mb-2">{category}</p>
-          <h3 className="font-headline text-3xl font-bold group-hover:text-tertiary-fixed transition-colors">{title}</h3>
+          <p className="font-label text-[10px] uppercase tracking-widest text-white/40 mb-2">{category}</p>
+          <h3 className="font-headline text-3xl font-bold text-white group-hover:text-accent transition-colors">{title}</h3>
         </div>
         <div className="w-12 h-12 rounded-full border border-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
           <ChevronRight />
@@ -1185,10 +1181,10 @@ function PortfolioCard({ span, image, title, category, onMouseEnter }: { span: s
 
 function TestimonialCard({ name, role, quote }: { name: string, role: string, quote: string }) {
   return (
-    <div className="min-w-[400px] lg:min-w-[500px] bg-surface-container-low p-12 lg:p-16 rounded-[3.5rem] border border-outline-variant/10 whitespace-normal flex flex-col justify-between transform-gpu [backface-visibility:hidden]">
+    <div className="min-w-[400px] lg:min-w-[500px] bg-[#0a0a0a] p-12 lg:p-16 rounded-[3.5rem] border border-white/5 whitespace-normal flex flex-col justify-between transform-gpu [backface-visibility:hidden]">
       <div>
-        <Quote size={60} className="text-tertiary-fixed mb-10 opacity-20" />
-        <p className="font-headline text-2xl lg:text-3xl font-bold leading-[1.3] mb-12">"{quote}"</p>
+        <Quote size={60} className="text-accent mb-10 opacity-20" />
+        <p className="font-headline text-2xl lg:text-3xl font-bold text-white leading-[1.3] mb-12">"{quote}"</p>
       </div>
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
@@ -1205,14 +1201,14 @@ function TestimonialCard({ name, role, quote }: { name: string, role: string, qu
 
 function ExperienceItem({ date, role, co, loc }: { date: string, role: string, co: string, loc: string }) {
   return (
-    <div className="experience-item interactive group py-10 border-b border-outline-variant/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:px-6 transition-all duration-500">
+    <div className="experience-item interactive group py-10 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:px-6 transition-all duration-500">
       <div className="flex flex-col gap-2">
-        <span className="font-label text-[10px] tracking-[4px] uppercase text-secondary">{date}</span>
-        <h3 className="font-headline text-3xl font-bold group-hover:text-tertiary-fixed transition-colors">{role}</h3>
+        <span className="font-label text-[10px] tracking-[4px] uppercase text-white/40">{date}</span>
+        <h3 className="font-headline text-3xl font-bold text-white group-hover:text-accent transition-colors">{role}</h3>
       </div>
       <div className="text-left md:text-right">
-        <p className="font-headline text-xl font-bold">{co}</p>
-        <p className="font-label text-xs uppercase tracking-widest text-secondary mt-1">{loc}</p>
+        <p className="font-headline text-xl font-bold text-white">{co}</p>
+        <p className="font-label text-xs uppercase tracking-widest text-white/40 mt-1">{loc}</p>
       </div>
     </div>
   );

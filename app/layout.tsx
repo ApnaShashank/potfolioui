@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Manrope, Space_Grotesk, Syncopate, Satisfy, Kalam, Playfair_Display } from "next/font/google";
+import { Inter, Manrope, Space_Grotesk, Syncopate, Satisfy, Kalam, Playfair_Display, Unbounded, DM_Mono } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
@@ -47,6 +47,19 @@ const hindi = Kalam({
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
+  display: "swap",
+});
+
+const unbounded = Unbounded({
+  subsets: ["latin"],
+  variable: "--font-unbounded",
+  display: "swap",
+});
+
+const dmMono = DM_Mono({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -110,7 +123,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} ${spaceGrotesk.variable} ${syncopate.variable} ${signature.variable} ${hindi.variable} ${playfair.variable} antialiased selection:bg-accent selection:text-primary`}>
+      <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} ${spaceGrotesk.variable} ${syncopate.variable} ${signature.variable} ${hindi.variable} ${playfair.variable} ${unbounded.variable} ${dmMono.variable} antialiased selection:bg-accent selection:text-primary`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
