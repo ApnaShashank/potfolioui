@@ -137,21 +137,21 @@ export default function Preloader() {
       <div className="relative w-full h-full flex flex-col items-center justify-center text-center px-6 z-10">
         
         {/* Stage 1: HELLO (Cursive / Signature Style) */}
-        <div ref={helloRef} className="absolute font-signature text-5xl md:text-[10rem] text-white tracking-normal translate-y-[-50%]">
+        <div ref={helloRef} className="absolute font-signature text-5xl md:text-[10rem] text-white tracking-normal translate-y-[-50%] opacity-0">
           Hello
         </div>
 
         {/* Stage 2: नमस्ते (Kalam / Artistic Style) */}
-        <div ref={namasteRef} className="absolute font-hindi text-6xl md:text-[12rem] text-accent font-bold">
+        <div ref={namasteRef} className="absolute font-hindi text-6xl md:text-[12rem] text-accent font-bold opacity-0">
           नमस्ते
         </div>
 
         {/* Stage 3: I am + Name */}
-        <div ref={identityRef} className="flex flex-col items-center justify-center w-full">
+        <div ref={identityRef} className="flex flex-col items-center justify-center w-full opacity-0">
             <span className="font-space text-[10px] md:text-xl text-white/40 uppercase tracking-[0.4em] md:tracking-[0.5em] mb-4">I am</span>
             <div ref={nameRef} className="font-signature text-4xl sm:text-5xl md:text-[11rem] text-accent flex flex-wrap justify-center gap-x-1 md:gap-x-4">
                 {"Shashank Gupta".split("").map((char, index) => (
-                    <span key={index} className="char inline-block" style={{ minWidth: char === " " ? "0.2em" : "auto" }}>
+                    <span key={index} className="char inline-block opacity-0" style={{ minWidth: char === " " ? "0.2em" : "auto" }}>
                         {char}
                     </span>
                 ))}
@@ -160,7 +160,7 @@ export default function Preloader() {
             {/* Stage 4: Full Stack Developer (Space Grotesk) */}
             <div ref={roleRef} className="mt-4 md:mt-10 font-space font-bold text-[10px] md:text-2xl text-white tracking-[0.2em] md:tracking-[0.3em] uppercase opacity-70">
                 {"Full Stack Developer".split("").map((char, index) => (
-                    <span key={index} className="role-char inline-block" style={{ minWidth: char === " " ? "0.2em" : "auto" }}>
+                    <span key={index} className="role-char inline-block opacity-0" style={{ minWidth: char === " " ? "0.2em" : "auto" }}>
                         {char}
                     </span>
                 ))}

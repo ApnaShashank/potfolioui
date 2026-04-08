@@ -51,9 +51,24 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://shashankguptaportal.vercel.app'),
   title: "Shashank Gupta — Vibe Coder & Creative Developer",
   description: "Vibe Coder specialized in building the best websites with interaction design and raw aesthetics. Currently open for freelancing and global job opportunities.",
   keywords: ["Shashank Gupta", "Vibe Coder", "Creative Developer", "Next.JS Portfolio", "Web Design", "Freelancer"],
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: "https://ik.imagekit.io/DEMOPROJECT/0e7bfec2-c25d-4cef-a895-df18857a856c.png",
     apple: "https://ik.imagekit.io/DEMOPROJECT/0e7bfec2-c25d-4cef-a895-df18857a856c.png",
@@ -61,6 +76,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Shashank Gupta — Vibe Coder",
     description: "Building the best websites that defy gravity. Currently open for freelancing and jobs.",
+    url: 'https://shashankguptaportal.vercel.app',
+    siteName: 'Shashank Gupta Portfolio',
     type: "website",
     locale: "en_IN",
     images: [
@@ -94,6 +111,23 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} ${spaceGrotesk.variable} ${syncopate.variable} ${signature.variable} ${hindi.variable} ${playfair.variable} antialiased selection:bg-accent selection:text-primary`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Shashank Gupta",
+              "url": "https://shashankguptaportal.vercel.app",
+              "jobTitle": "Vibe Coder & Creative Developer",
+              "knowsAbout": ["Full Stack Development", "Interaction Design", "UI/UX", "Next.js", "GSAP"],
+              "sameAs": [
+                "https://github.com/shashankguptadot",
+                "https://linkedin.com/in/shashankgupta"
+              ]
+            })
+          }}
+        />
         <LenisProvider>
           <Preloader />
           <CustomCursor />

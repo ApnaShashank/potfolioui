@@ -34,6 +34,10 @@ import {
   Anchor
 } from 'lucide-react';
 import Navbar from './components/Navbar';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+
+const WorldGlobe = dynamic(() => import('@/components/Globe'), { ssr: false });
 
 // Register plugins
 if (typeof window !== "undefined") {
@@ -47,6 +51,8 @@ export default function Home() {
   const aboutCursorRef = useRef<HTMLDivElement>(null);
   const [activeRow1, setActiveRow1] = useState(0); // 0 or 1
   const [activeRow2, setActiveRow2] = useState(1); // 0 or 1 (Initial Row 2 has 2nd items as big)
+  const [showIframe, setShowIframe] = useState(false);
+  const prototypeRef = useRef<HTMLElement>(null);
   const footerRef = useRef<HTMLElement>(null);
   const footerTextRef = useRef<HTMLHeadingElement>(null);
   const footerBgRef = useRef<HTMLDivElement>(null);
@@ -306,17 +312,19 @@ export default function Home() {
       });
     });
 
-    // 11. Prototype Internal Scroll
-    gsap.to(".prototype-screen-img", {
+    // 11. Prototype Internal Scroll (Disabled for direct interaction)
+    /*
+    gsap.to(".prototype-iframe", {
       scrollTrigger: {
         trigger: ".prototype-section",
         start: "top center",
         end: "bottom center",
-        scrub: 1,
+        scrub: 1.5,
       },
-      yPercent: -50,
+      yPercent: -75,
       ease: "none",
     });
+    */
 
     // 12. Testimonials horizontal loop
     const testiWrapper = document.querySelector(".testi-inner");
@@ -324,8 +332,9 @@ export default function Home() {
       gsap.to(testiWrapper, {
         xPercent: -50,
         ease: "none",
-        duration: 40,
+        duration: 20, // Sped up the animation significantly
         repeat: -1,
+        force3D: true, // Forces hardware acceleration to prevent blur
       });
     }
 
@@ -437,9 +446,25 @@ export default function Home() {
       duration: 0.5,
     });
 
+    // Iframe Lazy Loading Observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShowIframe(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" } // Start loading 200px before reaching it
+    );
+
+    if (prototypeRef.current) {
+      observer.observe(prototypeRef.current);
+    }
+
     return () => {
       window.removeEventListener("mousemove", onBadgeMove);
       cancelAnimationFrame(scrollRafId);
+      observer.disconnect();
     };
 
   }, { scope: container });
@@ -474,9 +499,12 @@ export default function Home() {
             <div className="relative">
                 {/* Central Portrait Layer */}
                 <div className="relative w-[85vw] max-w-[340px] lg:w-[420px] aspect-[4/5] bg-[#111] rounded-[3rem] overflow-hidden group shadow-[0_0_80px_rgba(0,0,0,1)] z-20 border border-white/10">
-                  <img 
-                    src="/main-img.webp" 
-                    className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 mix-blend-luminosity group-hover:mix-blend-normal"
+                  <Image 
+                    src="https://ik.imagekit.io/DEMOPROJECT/main-img.webp" 
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, 420px"
+                    className="object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 mix-blend-luminosity group-hover:mix-blend-normal"
                     alt="Shashank Gupta Portrait"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
@@ -733,8 +761,14 @@ export default function Home() {
             </a>
           </div>
           <div className="w-full lg:w-1/2 relative">
-            <div className="case-study-img rounded-[4rem] overflow-hidden shadow-2xl relative z-10 rotate-3 group hover:rotate-0 transition-transform duration-700">
-              <img src="https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=2070&auto=format&fit=crop" className="w-full h-auto" alt="NeoBank Case Study" />
+            <div className="case-study-img rounded-[4rem] overflow-hidden shadow-2xl relative z-10 rotate-3 group hover:rotate-0 transition-transform duration-700 aspect-video">
+              <Image 
+                src="https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=2070&auto=format&fit=crop" 
+                fill
+                sizes="(max-width: 768px) 100vw, 800px"
+                className="object-cover" 
+                alt="NeoBank Case Study" 
+              />
               <div className="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors"></div>
             </div>
             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-tertiary-fixed/30 blur-[80px] -z-10 animate-float"></div>
@@ -791,11 +825,11 @@ export default function Home() {
       </section>
 
       {/* 11. Interactive Prototypes [NEW] */}
-      <section className="prototype-section py-32 px-6 lg:px-20 bg-surface-container-low overflow-hidden">
+      <section ref={prototypeRef} className="prototype-section py-32 px-6 lg:px-20 bg-surface-container-low overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
           <div className="w-full lg:w-1/2">
-            <h2 className="font-headline text-4xl lg:text-6xl font-bold mb-8">Feel the Physics</h2>
-            <p className="font-body text-xl text-on-surface-variant leading-relaxed opacity-70 mb-12">I believe in "prototyping as thinking." I build high-fidelity interactive models that simulate the final product's physics before a single line of code is written.</p>
+            <h2 className="font-headline text-4xl lg:text-6xl font-bold mb-8">Live Playground</h2>
+            <p className="font-body text-xl text-on-surface-variant leading-relaxed opacity-70 mb-12">Step into a live ecosystem of previous works. This sandbox demonstrates how I maintain fluid physics and high-end aesthetics across diverse digital platforms.</p>
             <div className="space-y-8">
               <div className="flex items-center gap-6 group">
                 <div className="w-14 h-14 rounded-full bg-tertiary-fixed flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -820,8 +854,25 @@ export default function Home() {
           <div className="w-full lg:w-1/2 flex justify-center py-20 relative">
             <div className="w-[300px] h-[600px] bg-black rounded-[3.5rem] p-4 relative shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-[8px] border-black overflow-hidden z-10">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-6 bg-black rounded-b-3xl z-30"></div>
-              <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=2070&auto=format&fit=crop" className="prototype-screen-img w-full h-[200%] object-cover" alt="Mobile App UI" />
+              <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative group/phone">
+                {showIframe ? (
+                  <iframe 
+                    src="https://shashankguptadot.vercel.app/" 
+                    loading="lazy"
+                    className="prototype-iframe w-[125%] h-[200%] border-none origin-top-left scale-[0.8] transition-transform"
+                    title="Live Portfolio Preview"
+                    style={{ width: '375px', height: '1200px' }}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-surface-container flex items-center justify-center">
+                    <div className="w-10 h-10 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
+                
+                {/* Hover overlay hint */}
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/phone:opacity-100 transition-opacity pointer-events-none z-20">
+                    <p className="text-white font-space text-[10px] uppercase tracking-widest bg-black/60 px-4 py-2 rounded-full backdrop-blur-sm">Click & Scroll inside</p>
+                </div>
               </div>
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-tertiary-fixed/10 blur-[120px] rounded-full -z-10"></div>
@@ -834,7 +885,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-20 mb-20 text-center">
           <h2 className="font-headline text-3xl font-bold opacity-30 uppercase tracking-[15px]">Industry Trust</h2>
         </div>
-        <div className="testi-inner flex gap-8 whitespace-nowrap">
+        <div className="testi-inner flex gap-8 whitespace-nowrap will-change-transform [backface-visibility:hidden] [-webkit-font-smoothing:antialiased]">
           {[1, 2].map((i) => (
             <React.Fragment key={i}>
               <TestimonialCard name="Sarah Jenkins" role="CEO @ FinStream" quote="One of the few designers who actually understands business goals. The UI wasn't just pretty; it actually worked." />
@@ -846,14 +897,42 @@ export default function Home() {
       </section>
 
       {/* 13. Experience Section */}
-      <section className="experience-section py-32 px-6 lg:px-20 bg-brutal-bg">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="font-headline text-4xl lg:text-7xl font-bold mb-20 text-white uppercase tracking-tighter">The Journey</h2>
-          <div className="space-y-4">
-            <ExperienceItem date="2021 — PRESENT" role="Vibe Coder / Freelancer" co="Independent Studio" loc="Delhi, India" />
-            <ExperienceItem date="2018 — 2021" role="Senior UI Developer" co="Digital Alchemy" loc="New Delhi, India" />
-            <ExperienceItem date="2016 — 2018" role="Interaction Designer" co="Creative Pulsar" loc="NCR, India" />
+      <section className="experience-section py-32 px-6 lg:px-20 bg-brutal-bg relative border-y border-white/5 overflow-hidden">
+        
+        {/* Decorative elements */}
+        <div className="absolute top-20 right-20 w-72 h-72 bg-accent/5 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
+
+        <div className="max-w-[90rem] mx-auto flex flex-col lg:flex-row gap-16 lg:gap-8 items-center">
+          
+          {/* Timeline side (Right side on desktop, top on mobile) */}
+          <div className="w-full lg:w-[45%] order-2 lg:order-1 px-4 lg:px-0">
+            <h2 className="font-headline text-4xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tighter">The <span className="text-accent">Journey</span></h2>
+            <p className="font-space text-[10px] lg:text-xs uppercase tracking-[5px] text-white/50 mb-16 max-w-sm">
+               Rooted in India, delivering iconic digital experiences globally.
+            </p>
+
+            <div className="space-y-4">
+              <ExperienceItem date="2021 — PRESENT" role="Vibe Coder / Freelancer" co="Independent Studio" loc="Delhi, India" />
+              <ExperienceItem date="2018 — 2021" role="Senior UI Developer" co="Digital Alchemy" loc="New Delhi, India" />
+              <ExperienceItem date="2016 — 2018" role="Interaction Designer" co="Creative Pulsar" loc="NCR, India" />
+            </div>
           </div>
+
+          {/* Globe Side (Left side on desktop, bottom on mobile) */}
+          <div className="w-full lg:w-[55%] order-1 lg:order-2 relative z-10">
+            
+            {/* The Globe Component */}
+            <div className="relative w-full rounded-[4rem] group flex justify-center items-center">
+              <WorldGlobe />
+
+              {/* Interaction Hint */}
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 font-space text-[10px] uppercase tracking-[4px] text-white/30 pointer-events-none bg-black/40 px-4 py-2 rounded-full backdrop-blur-md opacity-100 group-hover:opacity-0 transition-opacity duration-500">
+                Drag to Explore
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
@@ -1077,7 +1156,13 @@ function PortfolioCard({ span, image, title, category, onMouseEnter }: { span: s
       onMouseEnter={onMouseEnter}
     >
       <div className="relative rounded-[3rem] overflow-hidden bg-surface-container-low aspect-[4/3] mb-8 shadow-xl">
-        <img src={image} alt={title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
+        <Image 
+          src={image} 
+          alt={title} 
+          fill
+          sizes="(max-width: 768px) 100vw, 600px"
+          className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" 
+        />
         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/20 transition-all duration-700"></div>
         <div className="absolute top-10 right-10 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all">
           <div className="w-16 h-16 bg-tertiary-fixed rounded-full flex items-center justify-center text-primary rotate-45 group-hover:rotate-0 transition-transform duration-700">
@@ -1100,7 +1185,7 @@ function PortfolioCard({ span, image, title, category, onMouseEnter }: { span: s
 
 function TestimonialCard({ name, role, quote }: { name: string, role: string, quote: string }) {
   return (
-    <div className="min-w-[400px] lg:min-w-[500px] bg-surface-container-low p-12 lg:p-16 rounded-[3.5rem] border border-outline-variant/10 whitespace-normal flex flex-col justify-between">
+    <div className="min-w-[400px] lg:min-w-[500px] bg-surface-container-low p-12 lg:p-16 rounded-[3.5rem] border border-outline-variant/10 whitespace-normal flex flex-col justify-between transform-gpu [backface-visibility:hidden]">
       <div>
         <Quote size={60} className="text-tertiary-fixed mb-10 opacity-20" />
         <p className="font-headline text-2xl lg:text-3xl font-bold leading-[1.3] mb-12">"{quote}"</p>
