@@ -4,6 +4,7 @@ import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
 import CustomCursor from "@/components/CustomCursor";
 import Preloader from "@/components/Preloader";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -145,6 +146,7 @@ export default function RootLayout({
           <Preloader />
           <CustomCursor />
           {children}
+          <Analytics />
         </LenisProvider>
       </body>
     </html>
