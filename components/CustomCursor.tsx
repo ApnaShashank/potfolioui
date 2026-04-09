@@ -17,6 +17,9 @@ export default function CustomCursor() {
     gsap.set(cursor, { opacity: 0 });
 
     const onMouseMove = (e: MouseEvent) => {
+      // Basic check for touch device or small screen to possibly skip cursor
+      if (window.matchMedia("(pointer: coarse)").matches) return;
+
       mouseX = e.clientX;
       mouseY = e.clientY;
       

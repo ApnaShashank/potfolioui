@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -17,6 +17,7 @@ import {
   Star,
   Quote,
   Briefcase,
+  ChevronLeft,
   ChevronRight,
   Globe,
   Layout,
@@ -291,17 +292,21 @@ export default function Home() {
     });
 
     // 6. Services Reveal
-    gsap.from(".service-card", {
-      scrollTrigger: {
-        trigger: ".services-section",
-        start: "top 75%",
-      },
-      y: 40,
-      opacity: 0,
-      stagger: 0.2,
-      duration: 0.8,
-      ease: "power3.out",
-    });
+    gsap.fromTo(".service-card", 
+      { y: 40, opacity: 0 },
+      {
+        scrollTrigger: {
+          trigger: ".services-section",
+          start: "top 75%",
+          toggleActions: "play none none none"
+        },
+        y: 0,
+        opacity: 1,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "power3.out",
+      }
+    );
 
     // 7. Tools Pop-in
     gsap.from(".tool-icon", {
@@ -333,32 +338,22 @@ export default function Home() {
       ease: "none",
     });
 
-    // 9. Case Study Parallax
-    gsap.to(".case-study-img", {
-      scrollTrigger: {
-        trigger: ".case-study-section",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-      y: -100,
-      ease: "none",
-    });
-
-    // 10. Portfolio Image Zoom
-    const portfolioItems = document.querySelectorAll(".portfolio-item");
-    portfolioItems.forEach((item) => {
-      const img = item.querySelector("img");
-      gsap.to(img, {
+    // 9. Ecosystem Cards Reveal
+    gsap.fromTo(".ecosystem-card", 
+      { y: 50, opacity: 0, scale: 0.95 },
+      {
         scrollTrigger: {
-          trigger: item,
-          start: "top bottom",
-          scrub: true,
+          trigger: "#ecosystem",
+          start: "top 75%",
         },
-        scale: 1.1,
-        ease: "none",
-      });
-    });
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "back.out(1.2)"
+      }
+    );
 
     // 11. Prototype Internal Scroll (Disabled for direct interaction)
     /*
@@ -386,19 +381,27 @@ export default function Home() {
       });
     }
 
-    // 13. Experience Items Stagger
     // 13. Experience Items & Text Stagger
-    gsap.from(".experience-reveal, .experience-item", {
-      scrollTrigger: {
-        trigger: ".experience-section",
-        start: "top 80%",
-      },
-      y: 50,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 1,
-      ease: "power3.out",
-    });
+    gsap.fromTo(".experience-reveal, .experience-item", 
+      { y: 50, opacity: 0 },
+      {
+        scrollTrigger: {
+          trigger: ".experience-section",
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        y: 0,
+        opacity: 1,
+        stagger: 0.1,
+        duration: 1,
+        ease: "power3.out",
+      }
+    );
+
+    // Refresh triggers to account for dynamic heights
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1000);
 
     // 14. Footer Section Unified Parallax
     if (footerRef.current && footerTextRef.current && footerBgRef.current) {
@@ -525,13 +528,13 @@ export default function Home() {
       <main ref={container} className="bg-brutal-bg text-brutal-fg overflow-hidden">
       <div id="scroll-content">
       {/* 1. Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-32 lg:pt-0 px-10 lg:px-24 mb-20">
+      <section className="relative min-h-screen flex items-center justify-center pt-24 lg:pt-0 px-4 sm:px-6 lg:px-24 mb-10 lg:mb-20">
         {/* Layered Background Blobs - Optimized (Removed expensive blur, used radial gradient) */}
         <div className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(204,255,0,0.06)_0%,transparent_60%)] rounded-full animate-float opacity-80 pointer-events-none" style={{ willChange: 'transform' }}></div>
 
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10 preserve-3d">
           <div className="perspective-1000 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h1 className="hero-title group flex flex-col items-center lg:items-start font-unbounded text-[clamp(2.5rem,7vw,6.5rem)] font-black leading-[0.9] tracking-tighter uppercase text-white mb-8 transition-all">
+            <h1 className="hero-title group flex flex-col items-center lg:items-start font-unbounded text-[clamp(2rem,7vw,6.5rem)] font-black leading-[0.9] tracking-tighter uppercase text-white mb-6 lg:mb-8 transition-all">
               <div className="relative">
                 {"SHASHANK"}
               </div>
@@ -540,7 +543,7 @@ export default function Home() {
               </div>
             </h1>
             
-            <p className="font-space text-sm lg:text-base text-white/50 max-w-md mb-10 leading-relaxed uppercase tracking-widest px-4 lg:px-0">
+            <p className="font-space text-xs sm:text-sm lg:text-base text-white/50 max-w-md mb-6 lg:mb-10 leading-relaxed uppercase tracking-widest px-2 lg:px-0">
                 Full Stack Developer & AI Learner <br/>
                 Crafting clean, interactive, and user-first digital experiences.
             </p>
@@ -548,7 +551,7 @@ export default function Home() {
           <div className="relative flex justify-center items-center py-12 lg:py-0">
             <div className="relative">
                 {/* Central Portrait Layer */}
-                <div className="relative w-[85vw] max-w-[340px] lg:w-[420px] aspect-[4/5] bg-[#111] rounded-[3rem] overflow-hidden group shadow-[0_0_80px_rgba(0,0,0,1)] z-20 border border-white/10">
+                <div className="relative w-[70vw] max-w-[280px] sm:max-w-[340px] lg:w-[420px] aspect-[4/5] bg-[#111] rounded-[2rem] lg:rounded-[3rem] overflow-hidden group shadow-[0_0_80px_rgba(0,0,0,1)] z-20 border border-white/10">
                   <Image 
                     src="https://ik.imagekit.io/DEMOPROJECT/main-img.webp" 
                     fill
@@ -561,10 +564,10 @@ export default function Home() {
                 </div>
 
                 {/* Floating Badges Layer */}
-                <FloatingBadge text="Full Stack Dev" icon={<Zap size={14}/>} className="top-[5%] -left-[2%] lg:-left-[15%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="System Architect" icon={<Code size={14}/>} className="top-[35%] -right-[5%] lg:-right-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="Mobile Engineer" icon={<Smartphone size={14}/>} className="bottom-[25%] -left-[5%] lg:-left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50" />
-                <FloatingBadge text="AI Research" icon={<Cpu size={14}/>} className="bottom-[12%] -right-[2%] lg:-right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50" />
+                <FloatingBadge text="Full Stack Dev" icon={<Zap size={14}/>} className="top-[5%] -left-[2%] lg:-left-[15%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50 scale-[0.6] sm:scale-100" />
+                <FloatingBadge text="System Architect" icon={<Code size={14}/>} className="top-[35%] -right-[5%] lg:-right-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50 scale-[0.6] sm:scale-100" />
+                <FloatingBadge text="Mobile Engineer" icon={<Smartphone size={14}/>} className="bottom-[25%] -left-[5%] lg:-left-[20%] bg-black/60 text-white border-white/20 backdrop-blur-2xl z-50 scale-[0.6] sm:scale-100" />
+                <FloatingBadge text="AI Research" icon={<Cpu size={14}/>} className="bottom-[12%] -right-[2%] lg:-right-[15%] bg-accent text-black border-accent/30 backdrop-blur-2xl z-50 scale-[0.6] sm:scale-100" />
                 
                 {/* Dynamic SVG Layer - Optimized (Removed blur, added will-change) */}
                 <div className="absolute w-[180%] h-[180%] -top-[40%] -left-[40%] -z-10 opacity-60 pointer-events-none bg-[radial-gradient(circle,rgba(204,255,0,0.08)_0%,transparent_60%)] rounded-full"></div>
@@ -576,7 +579,7 @@ export default function Home() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-10 mix-blend-difference">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-4 z-10 mix-blend-difference hidden sm:flex">
           <span className="font-space text-[10px] uppercase tracking-[6px] text-white opacity-60">Scroll</span>
           <div className="w-[1px] h-24 relative overflow-hidden bg-white/20 rounded-full">
             <div className="absolute top-0 left-0 w-full h-full bg-accent origin-top animate-scroll-line"></div>
@@ -584,16 +587,16 @@ export default function Home() {
         </div>
         
         {/* Brutalist Tape Wrapper */}
-        <div className="absolute bottom-12 left-[-10%] w-[120%] bg-accent text-black -rotate-[3deg] py-4 border-y-4 border-black shadow-2xl z-30 pointer-events-none">
-            <div className="font-syncopate text-2xl lg:text-3xl font-black whitespace-nowrap animate-tape-scroll tracking-widest">
+        <div className="absolute bottom-6 sm:bottom-12 left-[-10%] w-[120%] bg-accent text-black -rotate-[3deg] py-2 sm:py-4 border-y-2 sm:border-y-4 border-black shadow-2xl z-30 pointer-events-none">
+            <div className="font-syncopate text-sm sm:text-2xl lg:text-3xl font-black whitespace-nowrap animate-tape-scroll tracking-widest">
                 UI DESIGN ✦ FRONTEND ✦ INTERACTIONS ✦ PERFORMANCE ✦ USER EXPERIENCE ✦ CREATIVE DEV ✦ UI DESIGN ✦ FRONTEND ✦ INTERACTIONS ✦ PERFORMANCE ✦ USER EXPERIENCE ✦ CREATIVE DEV ✦
             </div>
         </div>
       </section>
 
       {/* 2. Brutalist Text Section 1 */}
-      <section className="min-h-[70vh] bg-[#080808] flex items-center px-6 py-20 lg:p-[10vw] border-t border-[#222]">
-          <p className="font-space font-light text-[clamp(2rem,5vw,4rem)] leading-[1.1] text-[#444] max-w-6xl">
+      <section className="min-h-[50vh] lg:min-h-[70vh] bg-[#080808] flex items-center px-4 sm:px-6 py-12 lg:p-[10vw] border-t border-[#222]">
+          <p className="font-space font-light text-[clamp(1.2rem,4vw,4rem)] leading-[1.2] text-[#444] max-w-6xl">
               WE BUILD <span className="text-white font-bold">DIGITAL EXPERIENCES</span> THAT DEFY GRAVITY. NO TEMPLATES. NO LIMITS. JUST <span className="text-white font-bold">PURE CODE</span> AND <span className="text-white font-bold">RAW AESTHETICS</span>.
           </p>
       </section>
@@ -621,8 +624,8 @@ export default function Home() {
       </div>
 
       {/* 3. About Section */}
-      <section className="about-section py-32 px-6 lg:px-20 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+      <section className="about-section py-16 lg:py-32 px-4 sm:px-6 lg:px-20 bg-[#0a0a0a]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           <div ref={aboutImageRef} className="about-image relative group cursor-none">
             <div className="absolute -inset-4 bg-tertiary-fixed/5 rounded-[4rem] blur-2xl group-hover:bg-tertiary-fixed/10 transition-all duration-700"></div>
             <div className="relative aspect-square bg-[#111] rounded-[4rem] p-12 overflow-hidden flex items-center justify-center">
@@ -646,19 +649,19 @@ export default function Home() {
             </div>
           </div>
           <div className="about-content">
-            <h2 className="typing-text font-headline text-4xl lg:text-6xl font-bold mb-10 leading-tight">
+            <h2 className="typing-text font-headline text-2xl sm:text-4xl lg:text-6xl font-bold mb-6 lg:mb-10 leading-tight">
               {"I curate interfaces that speak before they function.".split("").map((char, i) => (
                 <span key={i} className="typing-char opacity-0">{char}</span>
               ))}
               <span className="typing-cursor inline-block w-[2px] h-[1em] bg-accent ml-1 translate-y-1"></span>
             </h2>
-            <div className="space-y-6 font-body text-lg text-white/50 leading-relaxed mb-12">
+            <div className="space-y-4 lg:space-y-6 font-body text-sm sm:text-base lg:text-lg text-white/50 leading-relaxed mb-8 lg:mb-12">
               <p>I’m a Full Stack Developer and AI learner focused on creating clean, interactive, and user-first digital experiences.</p>
               <p>I combine design thinking with modern development to build interfaces that not only look good, but feel smooth and intuitive.</p>
               <p>Every project I work on is crafted with attention to detail, performance, and real user behavior.</p>
             </div>
             
-            <div className="grid grid-cols-2 gap-12">
+            <div className="grid grid-cols-2 gap-6 lg:gap-12">
               <div>
                 <p className="font-headline text-5xl font-black text-primary"><span className="stat-number" data-target="2">0</span>+</p>
                 <p className="font-label text-[10px] uppercase tracking-widest text-white/40 mt-3">Years Exp.</p>
@@ -674,7 +677,7 @@ export default function Home() {
 
       {/* 4. Stats Section */}
       <section className="py-24 bg-[#080808] border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-6 lg:px-20 grid grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-12">
           <StatBox number="10" suffix="+" label="Projects" />
           <StatBox number="5" suffix="+" label="UI Concepts Built" />
           <StatBox number="100" suffix="%" label="Responsive Designs" />
@@ -683,16 +686,16 @@ export default function Home() {
       </section>
 
       {/* 5. Skills Section */}
-      <section id="about" className="py-32 px-6 lg:px-20 bg-brutal-bg">
+      <section id="about" className="py-16 lg:py-32 px-4 sm:px-6 lg:px-20 bg-brutal-bg">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row justify-between items-end gap-8 mb-20">
             <div className="max-w-2xl">
-              <h2 className="font-headline text-4xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tighter">Mastering the Craft</h2>
-              <p className="font-space text-lg text-white/50 uppercase tracking-widest leading-relaxed">Blending technical mastery with creative intuition to build high-performance digital products.</p>
+              <h2 className="font-headline text-3xl sm:text-4xl lg:text-7xl font-bold mb-4 lg:mb-6 text-white uppercase tracking-tighter">Mastering the Craft</h2>
+              <p className="font-space text-xs sm:text-sm lg:text-lg text-white/50 uppercase tracking-widest leading-relaxed">Blending technical mastery with creative intuition to build high-performance digital products.</p>
             </div>
           </div>
           
-          <div className="skills-grid grid grid-cols-1 lg:grid-cols-6 gap-6 min-h-[600px]">
+          <div className="skills-grid grid grid-cols-1 lg:grid-cols-6 gap-4 sm:gap-6 min-h-0 lg:min-h-[600px]">
             <SkillCard 
               span="lg:col-span-4 lg:row-span-2" 
               icon={<Palette size={36} />} 
@@ -733,10 +736,10 @@ export default function Home() {
       </section>
 
       {/* 6. Services Section */}
-      <section id="services" className="services-section py-32 px-6 lg:px-20 bg-[#080808] border-y border-white/5">
+      <section id="services" className="services-section py-16 lg:py-32 px-4 sm:px-6 lg:px-20 bg-[#080808] border-y border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-24 text-center md:text-left gap-8">
-            <h2 className="font-headline text-4xl lg:text-7xl font-bold text-white uppercase tracking-tighter">Solutions Provided</h2>
+            <h2 className="font-headline text-3xl sm:text-4xl lg:text-7xl font-bold text-white uppercase tracking-tighter">Solutions Provided</h2>
             <Link href="/contact" className="interactive group flex items-center gap-4 font-syncopate font-bold text-xl text-accent hover:text-white transition-colors">
               Request a Custom Solution
               <ChevronRight className="group-hover:translate-x-2 transition-transform" />
@@ -797,13 +800,13 @@ export default function Home() {
       </section>
 
       {/* 7. Tools Section */}
-      <section className="tools-section py-32 px-6 lg:px-20 bg-[#0a0a0a]">
+      <section className="tools-section py-16 lg:py-32 px-4 sm:px-6 lg:px-20 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="font-headline text-3xl font-bold mb-6 opacity-30 uppercase tracking-[10px]">The Arsenal</h2>
           <p className="font-body text-xl text-white/50 mb-16 max-w-2xl mx-auto tracking-wide">
             Tools & technologies I use to craft digital experiences.
           </p>
-          <div className="flex flex-wrap justify-center gap-10 lg:gap-14">
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-10 lg:gap-14">
             {/* Standard Technologies */}
             <ToolItem icon={<img src="https://skillicons.dev/icons?i=html" alt="HTML5" className="w-[50px] h-[50px]" />} label="HTML5" />
             <ToolItem icon={<img src="https://skillicons.dev/icons?i=css" alt="CSS3" className="w-[50px] h-[50px]" />} label="CSS3" />
@@ -833,10 +836,10 @@ export default function Home() {
       </section>
 
       {/* 8. Process Section */}
-      <section className="process-section py-40 px-6 lg:px-20 bg-[#050505] border-y border-white/5">
+      <section className="process-section py-16 lg:py-40 px-4 sm:px-6 lg:px-20 bg-[#050505] border-y border-white/5">
         <div className="max-w-7xl mx-auto relative">
           <div className="flex flex-col md:flex-row justify-between flex-wrap gap-8 items-end mb-24">
-             <h2 className="font-unbounded text-6xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9]">
+             <h2 className="font-unbounded text-4xl sm:text-6xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9]">
                The<br/><span className="text-accent">Method</span>
              </h2>
              <p className="font-mono text-[10px] uppercase tracking-[4px] text-white/30 max-w-xs text-right">
@@ -853,88 +856,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 9. Case Study Highlight */}
-      <section className="case-study-section py-20 px-6 lg:px-20 bg-[#0a0a0a] text-white overflow-hidden relative border-y border-white/5">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_rgba(204,255,0,0.15)_0%,transparent_70%)]"></div>
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20 relative z-10">
-          <div className="w-full lg:w-1/2">
-            <p className="font-space tracking-[4px] uppercase text-accent mb-8">Featured Case Study 2024</p>
-            <h2 className="font-headline text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10">SYNAPSE <br /><span className="text-white/20">ANALYTICS</span></h2>
-            <p className="font-space text-xl opacity-50 mb-12 max-w-xl uppercase tracking-widest">A high-performance AI dashboard that visualizes neural network training cycles in real-time, built for scaling engineering teams.</p>
-            <a href="mailto:shashank8808108802@gmail.com" className="interactive bg-accent text-black px-10 py-6 rounded-2xl font-syncopate font-black text-xl hover:scale-105 transition-transform flex items-center justify-center gap-4">
-              Explore Study <ArrowRight size={20} />
-            </a>
-          </div>
-          <div className="w-full lg:w-1/2 relative">
-            <div className="case-study-img rounded-[4rem] overflow-hidden shadow-2xl relative z-10 rotate-3 group hover:rotate-0 transition-transform duration-700 aspect-video">
-              <Image 
-                src="https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=2070&auto=format&fit=crop" 
-                fill
-                sizes="(max-width: 768px) 100vw, 800px"
-                className="object-cover" 
-                alt="NeoBank Case Study" 
-              />
-              <div className="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors"></div>
-            </div>
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-tertiary-fixed/30 blur-[80px] -z-10 animate-float"></div>
-          </div>
-        </div>
-      </section>
+      {/* 9. Digital Ecosystem / Selected Works [NEW] */}
+      <section id="ecosystem" className="py-16 lg:py-32 px-4 sm:px-6 lg:px-20 bg-[#050505] border-y border-white/5 relative overflow-hidden">
+        
+        {/* Subtle background glow */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent/5 blur-[150px] rounded-full pointer-events-none"></div>
 
-      {/* 10. Portfolio Showcase Grid */}
-      <section id="archive" className="py-32 px-6 lg:px-20 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end mb-24">
-            <h2 className="font-headline text-4xl lg:text-6xl font-bold text-white">The Archive</h2>
-            <p className="font-label text-xs uppercase tracking-[3px] text-white/40 pb-4">Scroll to Explore</p>
-          </div>
-          
-          <div className="flex flex-col gap-10 lg:gap-16">
-            {/* Row 1 */}
-            <div className="md:flex gap-10 lg:gap-16 items-start">
-              <PortfolioCard 
-                span={activeRow1 === 0 ? "flex-[7]" : "flex-[5]"} 
-                image="https://images.unsplash.com/photo-1618761767630-0114b392cf98?q=80&w=2070&auto=format&fit=crop" 
-                title="Aura AI" 
-                category="AI / Machine Learning" 
-                onMouseEnter={() => setActiveRow1(0)}
-              />
-              <PortfolioCard 
-                span={activeRow1 === 1 ? "flex-[7]" : "flex-[5] md:mt-32"} 
-                image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" 
-                title="Vault Stream" 
-                category="Full Stack / Fintech" 
-                onMouseEnter={() => setActiveRow1(1)}
-              />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+            <div>
+              <p className="font-space tracking-[4px] uppercase text-accent mb-6">Digital Ecosystem</p>
+              <h2 className="font-headline text-3xl sm:text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter text-white">SELECTED <br /><span className="text-white/20">WORKS.</span></h2>
             </div>
+            <p className="font-space text-[10px] uppercase tracking-[4px] text-white/30 max-w-xs text-left md:text-right">
+              A curated collection of digital products, UI systems, and interactive tools built for the modern web.
+            </p>
+          </div>
 
-            {/* Row 2 */}
-            <div className="md:flex gap-10 lg:gap-16 items-start">
-              <PortfolioCard 
-                span={activeRow2 === 0 ? "flex-[8]" : "flex-[4]"} 
-                image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop" 
-                title="Pulse Edge" 
-                category="IoT / Web Architecture" 
-                onMouseEnter={() => setActiveRow2(0)}
-              />
-              <PortfolioCard 
-                span={activeRow2 === 1 ? "flex-[7]" : "flex-[5] md:mt-32"} 
-                image="https://images.unsplash.com/photo-1551288049-bbda486c2ad0?q=80&w=2070&auto=format&fit=crop" 
-                title="Cloud Core" 
-                category="DevOps / Systems" 
-                onMouseEnter={() => setActiveRow2(1)}
-              />
-            </div>
+          {/* Flagship Projects: Accordion Layout */}
+          <div className="relative z-10 w-full mb-32">
+             <ProjectAccordion />
           </div>
+
+          <div className="flex flex-col items-center justify-center mt-32 mb-16 text-center z-10 relative">
+             <p className="font-space tracking-[4px] uppercase text-white/30 mb-4">More Work</p>
+             <h2 className="font-headline text-2xl sm:text-3xl lg:text-5xl font-bold text-white">THE COLLECTION</h2>
+          </div>
+
+          {/* Collection Projects: Coverflow Carousel */}
+          <div className="relative z-10 w-full">
+            <ProjectSlider />
+          </div>
+
         </div>
       </section>
 
       {/* 11. Interactive Prototypes [NEW] */}
-      <section ref={prototypeRef} className="prototype-section py-32 px-6 lg:px-20 bg-[#080808] overflow-hidden border-y border-white/5">
+      <section ref={prototypeRef} className="prototype-section py-16 lg:py-32 px-4 sm:px-6 lg:px-20 bg-[#080808] overflow-hidden border-y border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
           <div className="w-full lg:w-1/2">
-            <h2 className="font-headline text-4xl lg:text-6xl font-bold text-white mb-8">Live Playground</h2>
-            <p className="font-body text-xl text-white/50 leading-relaxed mb-12">Step into a live ecosystem of previous works. This sandbox demonstrates how I maintain fluid physics and high-end aesthetics across diverse digital platforms.</p>
+            <h2 className="font-headline text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-4 lg:mb-8">Live Playground</h2>
+            <p className="font-body text-sm sm:text-base lg:text-xl text-white/50 leading-relaxed mb-8 lg:mb-12">Step into a live ecosystem of previous works. This sandbox demonstrates how I maintain fluid physics and high-end aesthetics across diverse digital platforms.</p>
             <div className="space-y-8">
               <div className="flex items-center gap-6 group">
                 <div className="w-14 h-14 rounded-full bg-tertiary-fixed flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -957,7 +919,7 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full lg:w-1/2 flex justify-center py-20 relative">
-            <div className="w-[300px] h-[600px] bg-black rounded-[3.5rem] p-4 relative shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-[8px] border-black overflow-hidden z-10">
+            <div className="w-[240px] sm:w-[300px] h-[480px] sm:h-[600px] bg-black rounded-[2.5rem] sm:rounded-[3.5rem] p-3 sm:p-4 relative shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-[6px] sm:border-[8px] border-black overflow-hidden z-10">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-6 bg-black rounded-b-3xl z-30"></div>
               <div className="w-full h-full bg-[#111] rounded-[2.5rem] overflow-hidden relative group/phone">
                 {showIframe ? (
@@ -986,7 +948,7 @@ export default function Home() {
       </section>
 
       {/* 12. Testimonials Section [NEW] */}
-      <section className="py-32 bg-[#030303] overflow-hidden border-y border-white/5">
+      <section className="py-16 lg:py-32 bg-[#030303] overflow-hidden border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-20 mb-20 text-center">
           <h2 className="font-headline text-3xl font-bold opacity-30 uppercase tracking-[15px]">Industry Trust</h2>
         </div>
@@ -1002,7 +964,7 @@ export default function Home() {
       </section>
 
       {/* 13. Experience Section */}
-      <section className="experience-section py-32 px-6 lg:px-20 bg-brutal-bg relative border-y border-white/5 overflow-hidden">
+      <section className="experience-section py-16 lg:py-32 px-4 sm:px-6 lg:px-20 bg-brutal-bg relative border-y border-white/5 overflow-hidden">
         
         {/* Decorative elements */}
         <div className="absolute top-20 right-20 w-72 h-72 bg-accent/5 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
@@ -1011,7 +973,7 @@ export default function Home() {
           
           {/* Timeline side (Left side on desktop, top on mobile) */}
           <div className="w-full lg:w-[45%] order-2 lg:order-1 px-4 lg:px-0 relative z-20">
-            <h2 className="experience-reveal font-headline text-4xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tighter">
+            <h2 className="experience-reveal font-headline text-3xl sm:text-4xl lg:text-7xl font-bold mb-4 lg:mb-6 text-white uppercase tracking-tighter">
               The <span className="text-accent">Journey</span>
             </h2>
             <p className="experience-reveal font-space text-xs lg:text-sm uppercase tracking-[4px] text-white/70 mb-16 max-w-sm leading-relaxed">
@@ -1057,14 +1019,14 @@ export default function Home() {
         </div>
 
         {/* CTA Content — Direct Parallax */}
-        <div className="relative z-10 pt-48 pb-20 px-6 lg:px-20 text-center">
+        <div className="relative z-10 pt-24 lg:pt-48 pb-12 lg:pb-20 px-4 sm:px-6 lg:px-20 text-center">
           <h2 
             ref={footerTextRef}
-            className="cta-reveal-text font-headline text-[clamp(4rem,15vw,10rem)] font-black text-white leading-[0.8] tracking-tighter mb-16 cursor-none"
+            className="cta-reveal-text font-headline text-[clamp(2.5rem,12vw,10rem)] font-black text-white leading-[0.8] tracking-tighter mb-8 lg:mb-16 cursor-none"
           >
             LET'S <br /> CREATE <br /> <span className="text-accent">ICONIC</span>
           </h2>
-          <Link href="/contact" className="interactive inline-block bg-accent text-black px-12 py-8 rounded-full font-syncopate font-black text-2xl hover:scale-110 transition-transform shadow-[0_0_50px_rgba(204,255,0,0.3)]">
+          <Link href="/contact" className="interactive inline-block bg-accent text-black px-8 sm:px-12 py-5 sm:py-8 rounded-full font-syncopate font-black text-base sm:text-xl lg:text-2xl hover:scale-110 transition-transform shadow-[0_0_50px_rgba(204,255,0,0.3)]">
             Built My Website
           </Link>
         </div>
@@ -1114,11 +1076,11 @@ export default function Home() {
           </div>
 
           {/* Bottom Bar — Enhanced with Like & Views */}
-          <div className="border-t border-white/5 py-10 px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-10">
+          <div className="border-t border-white/5 py-6 lg:py-10 px-4 sm:px-6 lg:px-20 flex flex-col md:flex-row justify-between items-center gap-6 lg:gap-10">
             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12">
-              <p className="text-[10px] lg:text-xs uppercase tracking-[4px] text-white/40 font-medium">© 2026 SHASHANK GUPTA — BORN IN INDIA, SCALING GLOBALLY</p>
+              <p className="text-[8px] sm:text-[10px] lg:text-xs uppercase tracking-[2px] sm:tracking-[4px] text-white/40 font-medium text-center md:text-left">© 2026 SHASHANK GUPTA — BORN IN INDIA, SCALING GLOBALLY</p>
               
-              <div className="flex items-center gap-8">
+              <div className="flex items-center gap-4 sm:gap-8 flex-wrap justify-center">
                  {/* Views Counter */}
                  <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/[0.03] border border-white/5 group/stat">
                     <Eye size={20} className="text-white/20 group-hover/stat:text-accent transition-colors" />
@@ -1143,7 +1105,7 @@ export default function Home() {
 
             <div className="flex gap-4 items-center">
               <span className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(163,255,18,0.5)]"></span>
-              <span className="text-xs uppercase tracking-[4px] text-white/40 font-medium tracking-widest">AVAILABLE FOR NEW OPPORTUNITIES</span>
+              <span className="text-[8px] sm:text-xs uppercase tracking-[2px] sm:tracking-[4px] text-white/40 font-medium">AVAILABLE FOR NEW OPPORTUNITIES</span>
             </div>
           </div>
         </div>
@@ -1199,7 +1161,7 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
   return (
     <div
       ref={cardRef}
-      className={`skill-card relative ${span} bg-[#0a0a0a] p-10 lg:p-12 rounded-[3.5rem] border border-white/5 hover:bg-[#111] transition-colors duration-700 group overflow-hidden`}
+      className={`skill-card relative ${span} bg-[#0a0a0a] p-6 sm:p-10 lg:p-12 rounded-[2rem] sm:rounded-[3.5rem] border border-white/5 hover:bg-[#111] transition-colors duration-700 group overflow-hidden`}
     >
       {/* Background Reactive Mesh */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-1000 pointer-events-none">
@@ -1218,8 +1180,8 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
           <div className="w-20 h-20 bg-[#1a1a1a] rounded-3xl flex items-center justify-center mb-10 group-hover:bg-accent transition-all duration-700 group-hover:rotate-6 group-hover:scale-110 shadow-lg">
             <div className="text-primary group-hover:text-black transition-colors duration-700">{icon}</div>
           </div>
-          <h3 className="font-headline text-3xl lg:text-4xl font-bold text-white mb-6 tracking-tight">{title}</h3>
-          <p className="font-body text-xl text-white/50 leading-relaxed mb-10 group-hover:text-white/80 transition-opacity">{description}</p>
+          <h3 className="font-headline text-xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 lg:mb-6 tracking-tight">{title}</h3>
+          <p className="font-body text-sm sm:text-base lg:text-xl text-white/50 leading-relaxed mb-6 lg:mb-10 group-hover:text-white/80 transition-opacity">{description}</p>
         </div>
         <div className="flex flex-wrap gap-3">
           {skills.map(skill => (
@@ -1238,11 +1200,11 @@ function SkillCard({ icon, title, description, skills, span }: { icon: React.Rea
 
 function ServiceCard({ icon, title, description, points }: { icon: React.ReactNode, title: string, description: string, points: string[] }) {
   return (
-    <div className="service-card bg-[#0a0a0a] p-12 lg:p-16 rounded-[4rem] border border-white/5 hover:border-accent/50 transition-all duration-700 h-full flex flex-col justify-between">
+    <div className="service-card bg-[#0a0a0a] p-8 sm:p-12 lg:p-16 rounded-[2rem] sm:rounded-[4rem] border border-white/5 hover:border-accent/50 transition-all duration-700 h-full flex flex-col justify-between">
       <div>
         <div className="mb-10 scale-125 origin-left">{icon}</div>
-        <h3 className="font-headline text-3xl lg:text-4xl font-bold text-white mb-6">{title}</h3>
-        <p className="font-body text-xl text-white/50 leading-relaxed mb-10">{description}</p>
+        <h3 className="font-headline text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 lg:mb-6">{title}</h3>
+        <p className="font-body text-sm sm:text-base lg:text-xl text-white/50 leading-relaxed mb-6 lg:mb-10">{description}</p>
       </div>
       <div className="flex flex-wrap gap-4">
         {points.map(p => (
@@ -1282,13 +1244,13 @@ function ProcessStep({ num, title, desc }: { num: string, title: string, desc: s
           <div className="w-12 h-12 lg:w-20 lg:h-20 rounded-full border border-white/10 flex items-center justify-center font-mono text-sm lg:text-xl text-white/40 group-hover:border-accent/40 group-hover:bg-accent/10 group-hover:text-accent transition-all duration-700 bg-[#0a0a0a]">
             {num}
           </div>
-          <h3 className="font-unbounded text-4xl lg:text-6xl font-black text-white group-hover:text-accent transition-colors duration-500 uppercase tracking-tighter">
+          <h3 className="font-unbounded text-2xl sm:text-4xl lg:text-6xl font-black text-white group-hover:text-accent transition-colors duration-500 uppercase tracking-tighter">
             {title}
           </h3>
         </div>
         
-        <div className="w-full lg:w-1/3 flex items-center justify-between gap-8 pl-16 lg:pl-0">
-          <p className="font-body text-lg lg:text-2xl text-white/30 group-hover:text-white/80 transition-colors duration-500 leading-relaxed max-w-sm">
+        <div className="w-full lg:w-1/3 flex items-center justify-between gap-4 sm:gap-8 pl-0 sm:pl-16 lg:pl-0">
+          <p className="font-body text-sm sm:text-lg lg:text-2xl text-white/30 group-hover:text-white/80 transition-colors duration-500 leading-relaxed max-w-sm">
             {desc}
           </p>
           
@@ -1338,10 +1300,10 @@ function PortfolioCard({ span, image, title, category, onMouseEnter }: { span: s
 
 function TestimonialCard({ name, role, quote }: { name: string, role: string, quote: string }) {
   return (
-    <div className="min-w-[400px] lg:min-w-[500px] bg-[#0a0a0a] p-12 lg:p-16 rounded-[3.5rem] border border-white/5 whitespace-normal flex flex-col justify-between transform-gpu [backface-visibility:hidden]">
+    <div className="min-w-[280px] sm:min-w-[400px] lg:min-w-[500px] bg-[#0a0a0a] p-6 sm:p-12 lg:p-16 rounded-[2rem] sm:rounded-[3.5rem] border border-white/5 whitespace-normal flex flex-col justify-between transform-gpu [backface-visibility:hidden]">
       <div>
         <Quote size={60} className="text-accent mb-10 opacity-20" />
-        <p className="font-headline text-2xl lg:text-3xl font-bold text-white leading-[1.3] mb-12">"{quote}"</p>
+        <p className="font-headline text-lg sm:text-2xl lg:text-3xl font-bold text-white leading-[1.3] mb-8 lg:mb-12">"{quote}"</p>
       </div>
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
@@ -1351,6 +1313,201 @@ function TestimonialCard({ name, role, quote }: { name: string, role: string, qu
           <p className="font-bold text-lg">{name}</p>
           <p className="font-label text-xs uppercase tracking-widest text-secondary">{role}</p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+const flagshipProjects = [
+  { title: "Monolithic Curator", url: "https://monolithic-curator.vercel.app/", sub: "Platform", icon: <Layout /> },
+  { title: "HorseTyping", url: "https://horsetyping.vercel.app/", sub: "Web App", icon: <Terminal /> },
+  { title: "IStarAI", url: "https://istarai.vercel.app/", sub: "AI Tool", icon: <Bot /> },
+  { title: "NewIcons", url: "https://newicons.vercel.app/", sub: "Design System", icon: <Layers /> },
+  { title: "Brick Negotiate", url: "https://brick-negotiate.vercel.app/", sub: "PropTech", icon: <Briefcase /> },
+];
+
+function ProjectAccordion() {
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  return (
+    <div className="project-options mt-12 mb-20">
+      {flagshipProjects.map((proj, idx) => (
+        <div 
+          key={idx} 
+          className={`project-option ${activeIdx === idx ? 'active' : ''}`}
+          onClick={() => setActiveIdx(idx)}
+        >
+          {activeIdx === idx ? (
+             <div className="w-full h-full relative overflow-hidden bg-[#050505]">
+                <div className="absolute w-[200%] h-[200%] origin-top-left scale-[0.5] transition-opacity duration-500">
+                    <iframe src={proj.url} className="w-full h-full border-none bg-black" loading="lazy" title={proj.title} />
+                </div>
+                <a href={proj.url} target="_blank" rel="noreferrer" className="absolute top-4 right-4 z-50 w-12 h-12 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-accent hover:text-black transition-colors duration-300">
+                  <ArrowUpRight size={20} />
+                </a>
+             </div>
+          ) : (
+             <div className="w-full h-full bg-[#0a0a0a] flex items-center justify-center opacity-40">
+               {proj.icon}
+             </div>
+          )}
+          
+          <div className="shadow-layer"></div>
+          <div className="label">
+             <div className="icon">
+                {proj.icon}
+             </div>
+             <div className="info">
+                <div className="main">{proj.title}</div>
+                <div className="sub">{proj.sub}</div>
+             </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const collectionProjects = [
+  { title: "Skillbarters", date: "Community Platform", text: "A modern platform enabling users to freely exchange skills without monetary transactions. Built with Next.js and Tailwind.", url: "https://skillbarters.vercel.app/" },
+  { title: "Colorspace New", date: "Utility / Tools", text: "Advanced color palette generator and management tool for UI/UX designers, featuring live contrast checking.", url: "https://colorspacenew.vercel.app/" },
+  { title: "ColorGo", date: "Generator UI", text: "Instant gradient and color scheme generation with an interactive brutalist interface.", url: "https://colorgo.vercel.app/" },
+  { title: "Colorgen One", date: "Design Utility", text: "Minimalist tool for rapidly exporting and testing brand colors across various digital mockups.", url: "https://colorgen-one.vercel.app/" },
+  { title: "Rumemaker", date: "Web Application", text: "A creative web application designed for generating dynamic rum setups and visualizing recipes.", url: "https://rumemaker.vercel.app/" },
+  { title: "New Vebsite", date: "Experimental Portfolio", text: "Experimental brutalist web portfolio showcasing ultra-modern design patterns and aggressive typography.", url: "https://newvebsite.vercel.app/" },
+];
+
+function ProjectSlider() {
+  const [active, setActive] = useState(2);
+  const [isMobile, setIsMobile] = useState(false);
+  const total = collectionProjects.length;
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const prev = () => setActive((a) => (a - 1 + total) % total);
+  const next = () => setActive((a) => (a + 1) % total);
+
+  // returns the index offset relative to active (-2, -1, 0, 1, 2)
+  const getOffset = (idx: number) => {
+    let offset = idx - active;
+    if (offset > total / 2) offset -= total;
+    if (offset < -total / 2) offset += total;
+    return offset;
+  };
+
+  return (
+    <div className="w-full flex flex-col items-center gap-12 py-8 overflow-hidden">
+      {/* Cards Stage */}
+      <div className="relative w-full flex items-end justify-center" style={{ height: isMobile ? '400px' : '460px' }}>
+        {collectionProjects.map((proj, idx) => {
+          const offset = getOffset(idx);
+          const isCenter = offset === 0;
+          const isAdjacent = Math.abs(offset) === 1;
+          const isVisible = Math.abs(offset) <= (isMobile ? 1 : 2); // Show fewer cards on mobile
+          if (!isVisible) return null;
+
+          const stepX = isMobile ? 220 : 300;
+          const translateX = offset * stepX;
+          const scale = isCenter ? 1 : isAdjacent ? (isMobile ? 0.75 : 0.82) : 0.68;
+          const translateY = isCenter ? 0 : isAdjacent ? (isMobile ? 40 : 50) : 80;
+          const zIndex = isCenter ? 30 : isAdjacent ? 20 : 10;
+          const opacity = isCenter ? 1 : isAdjacent ? (isMobile ? 0.5 : 0.7) : 0.4;
+
+          return (
+            <div
+              key={idx}
+              onClick={() => !isCenter && setActive(idx)}
+              className="absolute cursor-pointer select-none"
+              style={{
+                transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
+                zIndex,
+                opacity,
+                transition: 'all 0.6s cubic-bezier(0.05, 0.61, 0.41, 0.95)',
+                width: isMobile ? '280px' : '340px',
+              }}
+            >
+              {/* Card */}
+              <div
+                className={`rounded-[2rem] overflow-hidden border transition-all duration-500 ${
+                  isCenter
+                    ? 'border-accent/50 shadow-[0_0_60px_rgba(204,255,0,0.15)]'
+                    : 'border-white/10'
+                }`}
+                style={{ background: '#0d0d0d', height: '360px' }}
+              >
+                {/* Live preview iframe */}
+                <div className="relative w-full overflow-hidden" style={{ height: '220px', background: '#050505' }}>
+                  <div className="absolute w-[300%] h-[300%] origin-top-left" style={{ transform: 'scale(0.333)' }}>
+                    <iframe
+                      src={proj.url}
+                      className="w-full h-full border-none"
+                      loading="lazy"
+                      title={proj.title}
+                    />
+                  </div>
+                  {/* gradient fade overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent pointer-events-none" />
+                </div>
+
+                {/* Card Content */}
+                <div className="p-6 flex flex-col gap-3">
+                  <span className="font-space text-[10px] uppercase tracking-[3px] text-accent">{proj.date}</span>
+                  <h3 className="font-headline text-2xl font-bold text-white">{proj.title}</h3>
+                  <p className="font-space text-xs text-white/50 leading-relaxed line-clamp-2">{proj.text}</p>
+                  {isCenter && (
+                    <a
+                      href={proj.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 inline-flex items-center gap-2 font-space text-[10px] uppercase tracking-[3px] text-accent hover:text-white transition-colors"
+                    >
+                      Open Live <ArrowUpRight size={12} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Arrow Navigation */}
+      <div className="flex items-center gap-6">
+        <button
+          onClick={prev}
+          className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-accent hover:text-accent hover:bg-accent/10 transition-all duration-300"
+          aria-label="Previous"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        {/* Dots */}
+        <div className="flex gap-2">
+          {collectionProjects.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActive(idx)}
+              className={`rounded-full transition-all duration-400 ${
+                active === idx
+                  ? 'w-8 h-2 bg-accent'
+                  : 'w-2 h-2 bg-white/20 hover:bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={next}
+          className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-accent hover:text-accent hover:bg-accent/10 transition-all duration-300"
+          aria-label="Next"
+        >
+          <ChevronRight size={20} />
+        </button>
       </div>
     </div>
   );
