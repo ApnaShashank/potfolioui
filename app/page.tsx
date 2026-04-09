@@ -67,43 +67,71 @@ export default function Home() {
   const footerBgRef = useRef<HTMLDivElement>(null);
 
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(842);
+  const [likeCount, setLikeCount] = useState(0);
   const [viewCount, setViewCount] = useState(0);
 
-  // Initialize data
-  React.useEffect(() => {
-    // Simulated views
-    const savedViews = localStorage.getItem('portfolio-views');
-    const newViews = savedViews ? parseInt(savedViews) + 1 : 1245;
-    setViewCount(newViews);
-    localStorage.setItem('portfolio-views', newViews.toString());
+  // Initialize data from MongoDB
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        if (data.views !== undefined) setViewCount(data.views);
+        if (data.likes !== undefined) setLikeCount(data.likes);
+      } catch (err) {
+        console.error("Failed to fetch stats:", err);
+      }
+    };
 
-    // Likes persistence
+    const incrementView = async () => {
+      // Basic session-based view increment
+      const sessionKey = 'portfolio-session-view';
+      if (!sessionStorage.getItem(sessionKey)) {
+        try {
+          await fetch('/api/stats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'increment_view' }),
+          });
+          sessionStorage.setItem(sessionKey, 'true');
+        } catch (err) {
+          console.error("Failed to increment view:", err);
+        }
+      }
+    };
+
+    fetchStats();
+    incrementView();
+
+    // Local liked state
     const savedLike = localStorage.getItem('portfolio-liked');
     if (savedLike === 'true') {
       setIsLiked(true);
-      setLikeCount(prev => prev + 1);
     }
   }, []);
 
-  const handleLike = () => {
-    if (isLiked) {
-      setIsLiked(false);
-      setLikeCount(prev => prev - 1);
-      localStorage.setItem('portfolio-liked', 'false');
-    } else {
-      setIsLiked(true);
-      setLikeCount(prev => prev + 1);
-      localStorage.setItem('portfolio-liked', 'true');
-      
-      // Dramatic feedback animation
-      gsap.timeline()
-        .to(".heart-icon", { scale: 1.8, duration: 0.1, ease: "power2.out" })
-        .to(".heart-icon", { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-        
-      // Optional: Log to simulate "working" backend feel
-      console.log("Activity: Like registered successfully.");
+  const handleLike = async () => {
+    if (isLiked) return; // For now, only allow one-way like if guest
+
+    setIsLiked(true);
+    setLikeCount(prev => prev + 1);
+    localStorage.setItem('portfolio-liked', 'true');
+    
+    // Sync with MongoDB
+    try {
+      await fetch('/api/stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'toggle_like' }),
+      });
+    } catch (err) {
+      console.error("Failed to update like in DB:", err);
     }
+
+    // Dramatic feedback animation
+    gsap.timeline()
+      .to(".heart-icon", { scale: 1.8, duration: 0.1, ease: "power2.out" })
+      .to(".heart-icon", { scale: 1, duration: 0.5, ease: "elastic.out(1, 0.3)" });
   };
 
   useGSAP(() => {
@@ -1034,35 +1062,30 @@ export default function Home() {
         {/* Mega Name + Footer Bar */}
         <div className="relative z-10 mt-16">
 
-          {/* Social Icons — Left Side */}
-          <div className="hidden lg:flex absolute left-8 bottom-32 flex-col gap-8 z-20">
-            <a href="#" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="LinkedIn">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">LinkedIn</span>
+          {/* Social Icons — Persistent and Mobile Responsive */}
+          <div className="flex absolute left-4 lg:left-8 bottom-24 lg:bottom-32 flex-col gap-6 lg:gap-8 z-20">
+            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="LinkedIn">
+              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">LinkedIn</span>
             </a>
-            <a href="#" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Twitter">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Twitter</span>
+            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Twitter">
+              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Twitter</span>
             </a>
-            <a href="#" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="GitHub">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">GitHub</span>
-            </a>
-            <a href="#" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Dribbble">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94"/><path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32"/><path d="M8.56 2.75c4.37 6 6 9.42 8 17.72"/></svg>
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Dribbble</span>
+            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="GitHub">
+              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">GitHub</span>
             </a>
           </div>
 
-          {/* Social Icons — Right Side */}
-          <div className="hidden lg:flex absolute right-8 bottom-32 flex-col gap-8 z-20 items-end">
+          <div className="flex absolute right-4 lg:right-8 bottom-24 lg:bottom-32 flex-col gap-6 lg:gap-8 z-20 items-end">
             <a href="mailto:shashank8808108802@gmail.com" className="group flex items-center gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Email">
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Email</span>
-              <Mail size={28} />
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Email</span>
+              <Mail size={24} className="lg:w-7 lg:h-7" />
             </a>
-            <a href="#" className="group flex items-center gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Instagram">
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">Instagram</span>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Instagram">
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Instagram</span>
+              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
             </a>
           </div>
 
