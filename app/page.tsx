@@ -38,7 +38,8 @@ import {
   Rotate3D,
   Heart,
   Eye,
-  Rocket
+  Rocket,
+  X
 } from 'lucide-react';
 import Navbar from './components/Navbar';
 import dynamic from 'next/dynamic';
@@ -65,6 +66,27 @@ export default function Home() {
   const footerRef = useRef<HTMLElement>(null);
   const footerTextRef = useRef<HTMLHeadingElement>(null);
   const footerBgRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+  const [showCerts, setShowCerts] = useState(false);
+
+  const certificates = [
+    "https://ik.imagekit.io/DEMOPROJECT/adca.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/generativeaipw.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/cepialabs.png",
+    "https://ik.imagekit.io/DEMOPROJECT/awsprompt.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/pythoncwh.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/russianlanguage.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/internship1.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/programming.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/download.jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/download(1).jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/download(2).jpg",
+    "https://ik.imagekit.io/DEMOPROJECT/scaler",
+    "https://ik.imagekit.io/DEMOPROJECT/pythoncourse",
+    "https://ik.imagekit.io/DEMOPROJECT/pythonprogramming",
+    "https://ik.imagekit.io/DEMOPROJECT/chatbot",
+    "https://ik.imagekit.io/DEMOPROJECT/javascript"
+  ];
 
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -108,6 +130,56 @@ export default function Home() {
     if (savedLike === 'true') {
       setIsLiked(true);
     }
+  }, []);
+
+  // Services Drag-to-Scroll Logic
+  useEffect(() => {
+    const slider = servicesRef.current;
+    if (!slider) return;
+
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+
+    const handleMouseDown = (e: MouseEvent) => {
+      isDown = true;
+      slider.style.scrollSnapType = 'none'; // Disable snap while dragging
+      slider.style.scrollBehavior = 'auto'; // Disable smooth scroll while dragging
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    };
+
+    const handleMouseLeave = () => {
+      isDown = false;
+      slider.style.scrollSnapType = 'x mandatory';
+      slider.style.scrollBehavior = 'smooth';
+    };
+
+    const handleMouseUp = () => {
+      isDown = false;
+      slider.style.scrollSnapType = 'x mandatory';
+      slider.style.scrollBehavior = 'smooth';
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 2.5; 
+      slider.scrollLeft = scrollLeft - walk;
+    };
+
+    slider.addEventListener('mousedown', handleMouseDown);
+    slider.addEventListener('mouseleave', handleMouseLeave);
+    slider.addEventListener('mouseup', handleMouseUp);
+    slider.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      slider.removeEventListener('mousedown', handleMouseDown);
+      slider.removeEventListener('mouseleave', handleMouseLeave);
+      slider.removeEventListener('mouseup', handleMouseUp);
+      slider.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   const handleLike = async () => {
@@ -774,7 +846,7 @@ export default function Home() {
             </Link>
           </div>
           
-          <div className="flex overflow-x-auto pb-12 gap-8 snap-x snap-mandatory no-scrollbar group cursor-grab active:cursor-grabbing">
+          <div ref={servicesRef} className="flex overflow-x-auto pb-12 gap-8 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing select-none transition-all duration-300">
             <div className="flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
               <ServiceCard 
                 icon={<Layout size={40} className="text-accent" />}
@@ -1013,6 +1085,20 @@ export default function Home() {
               <ExperienceItem date="2025 — 2026" role="FullStack (Internship)" co="Cepialabs Pvt Ltd" loc="New Delhi, India" />
               <ExperienceItem date="2025 — PRESENT" role="Full Stack Development" co="Sheryians Coding School" loc="Bhopal , India" />
             </div>
+
+            <button 
+              onClick={() => setShowCerts(true)}
+              className="experience-reveal mt-12 group flex items-center gap-4 bg-white/5 border border-white/10 hover:border-accent/50 px-8 py-5 rounded-2xl transition-all duration-300 hover:bg-white/[0.08]"
+            >
+              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+                <Star size={20} />
+              </div>
+              <div className="text-left">
+                <p className="font-space text-[10px] uppercase tracking-[3px] text-white/40 mb-1">Validation</p>
+                <p className="font-headline text-lg font-bold text-white uppercase tracking-tight">View Credentials</p>
+              </div>
+              <ChevronRight className="ml-4 text-white/20 group-hover:text-accent group-hover:translate-x-2 transition-all" />
+            </button>
           </div>
 
           {/* Globe Side (Left side on desktop, bottom on mobile) */}
@@ -1062,31 +1148,53 @@ export default function Home() {
         {/* Mega Name + Footer Bar */}
         <div className="relative z-10 mt-16">
 
-          {/* Social Icons — Persistent and Mobile Responsive */}
-          <div className="flex absolute left-4 lg:left-8 bottom-24 lg:bottom-32 flex-col gap-6 lg:gap-8 z-20">
-            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="LinkedIn">
-              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">LinkedIn</span>
-            </a>
-            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Twitter">
-              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Twitter</span>
-            </a>
-            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="GitHub">
-              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">GitHub</span>
-            </a>
-          </div>
+          {/* Social Icons — Unified Bar Above Name */}
+          <div className="relative z-20 px-4 sm:px-6 lg:px-20 mb-12 lg:mb-16">
+            <div className="max-w-full flex flex-col md:flex-row justify-between items-center gap-8">
+              {/* Left Group */}
+              <div className="flex flex-wrap flex-row gap-6 sm:gap-8 items-center justify-center">
+                <a href="https://www.linkedin.com/in/apnashashank" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="LinkedIn">
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">LinkedIn</span>
+                </a>
+                <a href="https://x.com/ApnaShashank" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Twitter">
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Twitter</span>
+                </a>
+                <a href="https://github.com/apnaShashank" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="GitHub">
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">GitHub</span>
+                </a>
+                <a href="https://codepen.io/apnashashank" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="CodePen">
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" x2="12" y1="22" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/><polyline points="2 15.5 12 8.5 22 15.5"/><line x1="12" x2="12" y1="2" y2="8.5"/></svg>
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">CodePen</span>
+                </a>
+                <a href="https://linktr.ee/shashankgupta172" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-tertiary-fixed transition-colors duration-300" aria-label="Linktree">
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20v-8m0 0l4 4m-4-4l-4 4m4-12v8m0 0l4-4m-4 4l-4-4"/></svg>
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-tertiary-fixed opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Linktree</span>
+                </a>
+              </div>
 
-          <div className="flex absolute right-4 lg:right-8 bottom-24 lg:bottom-32 flex-col gap-6 lg:gap-8 z-20 items-end">
-            <a href="mailto:shashank8808108802@gmail.com" className="group flex items-center gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Email">
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Email</span>
-              <Mail size={24} className="lg:w-7 lg:h-7" />
-            </a>
-            <a href="#" target="_blank" className="group flex items-center gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Instagram">
-              <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Instagram</span>
-              <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-            </a>
+              {/* Right Group */}
+              <div className="flex flex-wrap flex-row gap-6 sm:gap-8 items-center justify-center">
+                <a href="mailto:shashank8808108802@gmail.com" className="group flex items-center lg:flex-row-reverse gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Email">
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 lg:-translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Email</span>
+                  <Mail size={24} className="lg:w-6 lg:h-6" />
+                </a>
+                <a href="https://www.instagram.com/life.on.coder/" target="_blank" className="group flex items-center lg:flex-row-reverse gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Instagram">
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 lg:-translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Instagram</span>
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                </a>
+                <a href="https://in.pinterest.com/apnashashank/" target="_blank" className="group flex items-center lg:flex-row-reverse gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="Pinterest">
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 lg:-translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">Pinterest</span>
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/></svg>
+                </a>
+                <a href="https://youtube.com/@apnashashank" target="_blank" className="group flex items-center lg:flex-row-reverse gap-3 text-white/30 hover:text-accent transition-colors duration-300" aria-label="YouTube">
+                  <span className="text-[10px] font-bold uppercase tracking-[3px] text-accent opacity-0 translate-x-2 lg:-translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden lg:block">YouTube</span>
+                  <svg width="24" height="24" className="lg:w-6 lg:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* SHASHANK — Massive Interactive Text at Bottom */}
@@ -1133,6 +1241,61 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Certificate Modal */}
+      {showCerts && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-8">
+          <div 
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+            onClick={() => setShowCerts(false)}
+          ></div>
+          
+          <div className="relative z-10 w-full max-w-6xl max-h-[85vh] bg-[#0a0a0a] border border-white/10 rounded-[2rem] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.5)]">
+            <div className="flex justify-between items-center px-8 py-6 border-b border-white/5 bg-white/2">
+              <div>
+                <h3 className="font-headline text-2xl font-bold text-white uppercase tracking-tighter">Verified Credentials</h3>
+                <p className="font-space text-[10px] uppercase tracking-[4px] text-white/30 mt-1">Foundations & Expert Achievements</p>
+              </div>
+              <button 
+                onClick={() => setShowCerts(false)}
+                className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-accent hover:text-black transition-all"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 sm:p-10 no-scrollbar">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                {certificates.map((cert, i) => (
+                  <div key={i} className="group relative aspect-[1.4/1] bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:border-accent/30 transition-all duration-500">
+                    <img 
+                      src={cert} 
+                      alt={`Certificate ${i+1}`}
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+                      <p className="text-accent font-space text-[9px] uppercase tracking-[4px] mb-2">View Full Asset</p>
+                      <button 
+                        onClick={() => window.open(cert, '_blank')}
+                        className="bg-white/10 backdrop-blur-md border border-white/10 text-white py-3 px-6 rounded-xl text-xs uppercase font-bold tracking-widest hover:bg-accent hover:text-black transition-all"
+                      >
+                        Enlarge Image
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="px-8 py-6 border-t border-white/5 bg-white/2 text-center">
+              <p className="font-space text-[10px] uppercase tracking-[4px] text-white/20">
+                Continuous Learning — Total {certificates.length} Assets Found
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
     </>
   );
@@ -1358,16 +1521,22 @@ function ProjectAccordion() {
         <div 
           key={idx} 
           className={`project-option ${activeIdx === idx ? 'active' : ''}`}
-          onClick={() => setActiveIdx(idx)}
+          onClick={() => {
+            if (activeIdx === idx) {
+              window.open(proj.url, "_blank");
+            } else {
+              setActiveIdx(idx);
+            }
+          }}
         >
           {activeIdx === idx ? (
-             <div className="w-full h-full relative overflow-hidden bg-[#050505]">
+             <div className="w-full h-full relative overflow-hidden bg-[#050505] pointer-events-none">
                 <div className="absolute w-[200%] h-[200%] origin-top-left scale-[0.5] transition-opacity duration-500">
                     <iframe src={proj.url} className="w-full h-full border-none bg-black" loading="lazy" title={proj.title} />
                 </div>
-                <a href={proj.url} target="_blank" rel="noreferrer" className="absolute top-4 right-4 z-50 w-12 h-12 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-accent hover:text-black transition-colors duration-300">
+                <div className="absolute top-4 right-4 z-50 w-12 h-12 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-accent hover:text-black transition-colors duration-300">
                   <ArrowUpRight size={20} />
-                </a>
+                </div>
              </div>
           ) : (
              <div className="w-full h-full bg-[#0a0a0a] flex items-center justify-center opacity-40">
@@ -1444,8 +1613,14 @@ function ProjectSlider() {
           return (
             <div
               key={idx}
-              onClick={() => !isCenter && setActive(idx)}
-              className="absolute cursor-pointer select-none"
+              onClick={() => {
+                if (!isCenter) {
+                  setActive(idx);
+                } else {
+                  window.open(proj.url, "_blank");
+                }
+              }}
+              className={`absolute cursor-pointer select-none transition-all duration-700 ${isCenter ? 'hover:scale-[1.02] active:scale-[0.98]' : ''}`}
               style={{
                 transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
                 zIndex,
@@ -1464,7 +1639,7 @@ function ProjectSlider() {
                 style={{ background: '#0d0d0d', height: '360px' }}
               >
                 {/* Live preview iframe */}
-                <div className="relative w-full overflow-hidden" style={{ height: '220px', background: '#050505' }}>
+                <div className="relative w-full overflow-hidden pointer-events-none" style={{ height: '220px', background: '#050505' }}>
                   <div className="absolute w-[300%] h-[300%] origin-top-left" style={{ transform: 'scale(0.333)' }}>
                     <iframe
                       src={proj.url}
@@ -1474,7 +1649,7 @@ function ProjectSlider() {
                     />
                   </div>
                   {/* gradient fade overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent" />
                 </div>
 
                 {/* Card Content */}
@@ -1483,14 +1658,9 @@ function ProjectSlider() {
                   <h3 className="font-headline text-2xl font-bold text-white">{proj.title}</h3>
                   <p className="font-space text-xs text-white/50 leading-relaxed line-clamp-2">{proj.text}</p>
                   {isCenter && (
-                    <a
-                      href={proj.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-1 inline-flex items-center gap-2 font-space text-[10px] uppercase tracking-[3px] text-accent hover:text-white transition-colors"
-                    >
+                    <div className="mt-1 inline-flex items-center gap-2 font-space text-[10px] uppercase tracking-[3px] text-accent hover:text-white transition-colors">
                       Open Live <ArrowUpRight size={12} />
-                    </a>
+                    </div>
                   )}
                 </div>
               </div>
@@ -1581,10 +1751,10 @@ function FooterChar({ char }: { char: string }) {
       onClick={() => setActive(!active)}
       className={`font-headline text-[clamp(5rem,20vw,18rem)] font-black leading-[0.85] tracking-tighter select-none cursor-pointer transition-all duration-500 ease-out inline-block ${
         active
-          ? "text-tertiary-fixed scale-105"
-          : "text-white/[0.06] hover:text-tertiary-fixed/80 hover:scale-110"
+          ? "text-tertiary-fixed scale-105 opacity-100"
+          : "text-white/[0.12] hover:text-tertiary-fixed/90 hover:scale-110 hover:opacity-100"
       }`}
-      style={{ willChange: "color, transform" }}
+      title="Toggle Character Fill"
     >
       {char}
     </span>

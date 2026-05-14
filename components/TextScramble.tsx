@@ -13,15 +13,21 @@ const PHRASES = [
 export default function TextScramble() {
   const [text, setText] = useState("INTERACTION REDEFINED");
   const [phraseIdx, setPhraseIdx] = useState(-1);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const scrambleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoCycleRef = useRef<NodeJS.Timeout | null>(null);
+  const currentTextRef = useRef(text);
+
+  useEffect(() => {
+    currentTextRef.current = text;
+  }, [text]);
 
   const scramble = useCallback((newText: string) => {
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (scrambleTimerRef.current) clearInterval(scrambleTimerRef.current);
     
     let iter = 0;
-    const len = Math.max(text.length, newText.length);
+    const len = Math.max(currentTextRef.current.length, newText.length);
     
-    timerRef.current = setInterval(() => {
+    scrambleTimerRef.current = setInterval(() => {
       const scrambled = newText
         .split("")
         .map((ch, i) => {
@@ -34,24 +40,41 @@ export default function TextScramble() {
       setText(scrambled);
       
       if (iter >= len + 4) {
-        if (timerRef.current) clearInterval(timerRef.current);
+        if (scrambleTimerRef.current) clearInterval(scrambleTimerRef.current);
       }
-      iter += 0.8; // Slightly faster for impact
+      iter += 0.8; 
     }, 40);
-  }, [text]);
+  }, []);
+
+  const triggerNext = useCallback(() => {
+    setPhraseIdx(prev => {
+      const nextIdx = (prev + 1) % PHRASES.length;
+      scramble(PHRASES[nextIdx]);
+      return nextIdx;
+    });
+  }, [scramble]);
+
+  // Start auto-cycle
+  useEffect(() => {
+    autoCycleRef.current = setInterval(triggerNext, 3000);
+    return () => {
+      if (autoCycleRef.current) clearInterval(autoCycleRef.current);
+      if (scrambleTimerRef.current) clearInterval(scrambleTimerRef.current);
+    };
+  }, [triggerNext]);
 
   const handleMouseEnter = () => {
-    const nextIdx = (phraseIdx + 1) % PHRASES.length;
-    setPhraseIdx(nextIdx);
-    scramble(PHRASES[nextIdx]);
+    triggerNext();
+    // Reset the auto-cycle timer so it doesn't jump immediately after hover
+    if (autoCycleRef.current) {
+      clearInterval(autoCycleRef.current);
+      autoCycleRef.current = setInterval(triggerNext, 3000);
+    }
   };
 
   // Initial scramble on mount
   useEffect(() => {
     scramble("INTERACTION REDEFINED");
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
   }, []);
 
   return (
@@ -77,7 +100,7 @@ export default function TextScramble() {
             </h2>
             
             <p className="mt-16 font-mono text-[10px] text-white/20 uppercase tracking-[8px] animate-pulse">
-                [ Protocol: Hover to Scramble ]
+                [ Protocol: Auto-Scramble Active ]
             </p>
         </div>
 

@@ -110,7 +110,7 @@ export default function Navbar() {
             <li><a href="#services" className="nav-link magnetic" data-text="SERVICES">SERVICES</a></li>
         </ul>
         
-        <a href="mailto:shashank8808108802@gmail.com" className="cta-btn magnetic hidden md:block"><span>LET'S TALK</span></a>
+        <a href="https://ik.imagekit.io/DEMOPROJECT/shashank_resume.pdf" target="_blank" rel="noopener noreferrer" className="cta-btn magnetic hidden md:block"><span>RESUME</span></a>
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center z-50">
@@ -132,8 +132,8 @@ export default function Navbar() {
             <li><a href="#services" onClick={() => setMobileMenuOpen(false)} className="font-space font-black text-4xl tracking-tighter hover:text-accent transition-colors text-white uppercase">Services</a></li>
           </ul>
           <div className="mt-8 pt-8 border-t border-white/10">
-             <a href="mailto:shashank8808108802@gmail.com" className="w-full py-5 bg-accent text-black rounded-xl font-space font-black text-xl uppercase tracking-widest flex items-center justify-center gap-4 transition-transform active:scale-95">
-              LET'S TALK
+             <a href="https://ik.imagekit.io/DEMOPROJECT/shashank_resume.pdf" target="_blank" rel="noopener noreferrer" className="w-full py-5 bg-accent text-black rounded-xl font-space font-black text-xl uppercase tracking-widest flex items-center justify-center gap-4 transition-transform active:scale-95">
+              RESUME
             </a>
           </div>
         </div>
